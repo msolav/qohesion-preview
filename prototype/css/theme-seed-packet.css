@@ -1,0 +1,55 @@
+/* Template: Seed Packet.
+   A variety-label block in the organization's brand colour, a three-cell
+   culture table, large bordered choices, one saturated accent on the cast button. */
+
+:root,
+[data-theme="seed-packet"]{
+  --font:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --bg:#EEF3E9;
+  --surface:#FFFFFF;
+  --hover:#F6FAF2;
+  --ink:#14151A;
+  --ink-2:#3F4F45;
+  --line-soft:rgba(20,21,26,.1);
+  --brand:#1F5C46;
+  --on-brand:#FFFFFF;
+  --accent:#C63A22;
+  --on-accent:#FFFFFF;
+  --focus:#1F5C46;
+  --danger:#B3261E;
+  --radius:14px;
+}
+
+[data-theme="seed-packet"] .ballot__head{
+  position:relative;margin-top:var(--space-3);
+  padding:var(--space-5) var(--space-5) var(--space-4);
+  background:var(--brand);color:var(--on-brand);
+  border-radius:22px 22px 6px 6px;
+}
+[data-theme="seed-packet"] .ballot__head::before{
+  content:"";position:absolute;left:var(--space-5);top:-9px;width:72px;height:12px;
+  background:var(--brand);border-radius:8px 8px 0 0;
+}
+[data-theme="seed-packet"] .ballot__head .bi>[lang="en"]{color:inherit;opacity:.9}
+[data-theme="seed-packet"] .when{margin-top:var(--space-5);padding-top:var(--space-4);border-top:1.5px dashed currentColor}
+[data-theme="seed-packet"] .steps li[aria-current="step"]{background:var(--on-brand);color:var(--brand);border-color:var(--on-brand)}
+
+[data-theme="seed-packet"] .facts{
+  background:var(--surface);border:1.5px solid var(--brand);border-top:0;
+  border-radius:0 0 14px 14px;
+}
+[data-theme="seed-packet"] .facts>div{padding:var(--space-3) var(--space-4) var(--space-4)}
+
+[data-theme="seed-packet"] .choices{gap:var(--space-3);margin-top:var(--space-5)}
+[data-theme="seed-packet"] .choice label{
+  background:var(--surface);border:1.5px solid var(--ink);border-radius:var(--radius);
+  transition:background .15s ease-out,border-color .15s ease-out,color .15s ease-out;
+}
+[data-theme="seed-packet"] .choice:hover label{background:var(--hover)}
+[data-theme="seed-packet"] .choice input:checked+label{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+[data-theme="seed-packet"] .choice input:checked+label .bi>[lang="en"]{color:inherit;opacity:.9}
+[data-theme="seed-packet"] .mark svg{color:var(--brand);opacity:0;transition:opacity .15s ease-out}
+[data-theme="seed-packet"] .choice input:checked+label .mark{background:var(--on-brand);border-color:var(--on-brand)}
+[data-theme="seed-packet"] .choice input:checked+label .mark svg{opacity:1}
+
+[data-theme="seed-packet"] .receipt{padding-top:var(--space-4);border-top:1.5px dashed var(--ink-2)}
