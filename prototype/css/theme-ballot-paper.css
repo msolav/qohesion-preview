@@ -27,7 +27,7 @@
 [data-theme="ballot-paper"] .steps li[aria-current="step"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
 [data-theme="ballot-paper"] .when{margin-top:var(--space-4)}
 
-[data-theme="ballot-paper"] .facts{padding:var(--space-2) var(--space-3);border-bottom:1px solid var(--ink)}
+[data-theme="ballot-paper"] .facts{padding:var(--space-1) var(--space-3);border-bottom:1px solid var(--ink)}
 [data-theme="ballot-paper"] .facts>div{padding:var(--space-3) var(--space-2)}
 
 [data-theme="ballot-paper"] .choice label{

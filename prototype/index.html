@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="fr" data-theme="seed-packet" data-lang="both">
+<html lang="fr" data-theme="seed-packet" data-lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Qohesion · Aperçu du bulletin / Ballot preview</title>
+<title>Qohesion · Aperçu du bulletin de vote</title>
 <meta name="robots" content="noindex">
 <meta name="description" content="Aperçu de développement du bulletin de vote de Qohesion. Development preview of the Qohesion ballot screen.">
 <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
@@ -22,10 +22,9 @@
     <img src="assets/mark.svg" alt="" width="34" height="29">
     <span>Association des usagers du parc</span>
   </a>
-  <nav class="lang" aria-label="Langue d’affichage / Display language">
-    <a href="?lang=fr" data-lang-link="fr" aria-label="Français">FR</a>
+  <nav class="lang" aria-label="Langue d’affichage" data-aria-fr="Langue d’affichage" data-aria-en="Display language">
+    <a href="?lang=fr" data-lang-link="fr" aria-label="Français" aria-current="true">FR</a>
     <a href="?lang=en" data-lang-link="en" aria-label="English">EN</a>
-    <a href="?lang=both" data-lang-link="both" aria-label="Français et English" aria-current="true">FR · EN</a>
   </nav>
 </header>
 
@@ -33,10 +32,11 @@
 
   <section id="done" class="done" aria-labelledby="done-title" tabindex="-1">
     <svg class="done__icon" viewBox="0 0 48 48" width="56" height="56" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="3"/><path d="M14 25l7 7 13-16" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <h2 id="done-title" class="bi"><span lang="fr">Votre vote est enregistré</span><span lang="en">Your vote is recorded</span></h2>
-    <p class="bi done__text"><span lang="fr">Gardez ce reçu. Il vous permet de vérifier plus tard que votre bulletin a été compté, sans révéler votre choix.</span><span lang="en">Keep this receipt. It lets you check later that your ballot was counted, without revealing your choice.</span></p>
-    <p class="done__code" aria-label="Code de reçu / Receipt code">K7QM-4X2R-9PTD</p>
-    <p class="done__next"><a href="#ballot" class="bi"><span lang="fr">Question suivante (2 sur 3)</span><span lang="en">Next question (2 of 3)</span></a></p>
+    <h2 id="done-title" class="bi"><span lang="fr">Le vote est enregistré</span><span lang="en">The vote is recorded</span></h2>
+    <p class="done__text bi"><span lang="fr">Le code de reçu ci-dessous permet de vérifier plus tard que le bulletin figure dans le décompte. Il ne révèle pas le choix exprimé.</span><span lang="en">The receipt code below allows checking later that the ballot is included in the count. It does not reveal the choice made.</span></p>
+    <p class="done__label bi"><span lang="fr">Code de reçu</span><span lang="en">Receipt code</span></p>
+    <p class="done__code">K7QM-4X2R-9PTD</p>
+    <p class="done__next"><a href="#ballot" class="bi"><span lang="fr">Passer à la question 2 sur 3</span><span lang="en">Go to question 2 of 3</span></a></p>
   </section>
 
   <section id="ballot" class="ballot-view" aria-labelledby="q-title">
@@ -45,72 +45,79 @@
       <div class="slip">
       <div class="ballot__head">
         <h1 id="q-title" class="bi"><span lang="fr">Adoption du budget 2027</span><span lang="en">Adoption of the 2027 budget</span></h1>
-        <p class="lede bi"><span lang="fr">Le conseil propose un budget de 12 400 $ pour l’année.</span><span lang="en">The board proposes a budget of $12,400 for the year.</span></p>
+        <p class="lede bi"><span lang="fr">Proposition du conseil : budget de 12 400 $ pour l’année 2027.</span><span lang="en">Board proposal: budget of $12,400 for the year 2027.</span></p>
         <div class="when">
-          <ol class="steps" aria-label="Question 1 sur 3 / Question 1 of 3">
+          <ol class="steps" aria-label="Question 1 sur 3" data-aria-fr="Question 1 sur 3" data-aria-en="Question 1 of 3">
             <li aria-current="step">1</li>
             <li>2</li>
             <li>3</li>
           </ol>
-          <p class="bi"><span lang="fr">Ferme le 12 déc., 20 h</span><span lang="en">Closes Dec 12, 8 pm</span></p>
+          <p class="bi"><span lang="fr">Fermeture : 12 déc., 20 h (heure de l’Est)</span><span lang="en">Closes: Dec 12, 8 pm (Eastern Time)</span></p>
         </div>
       </div>
 
       <dl class="facts">
-        <div><dt class="bi"><span lang="fr">Quorum</span><span lang="en">Quorum</span></dt><dd>50 % + 1</dd></div>
-        <div><dt class="bi"><span lang="fr">Adoption</span><span lang="en">Passes with</span></dt><dd class="bi"><span lang="fr">Majorité simple</span><span lang="en">Simple majority</span></dd></div>
-        <div><dt class="bi"><span lang="fr">Scrutin</span><span lang="en">Ballot</span></dt><dd class="bi"><span lang="fr">Secret</span><span lang="en">Secret</span></dd></div>
+        <div>
+          <dt class="bi"><span lang="fr">Quorum</span><span lang="en">Quorum</span></dt>
+          <dd>50 % + 1</dd>
+          <dd class="note bi"><span lang="fr">Nombre minimal de membres inscrits qui doivent voter pour que le résultat soit valide.</span><span lang="en">Minimum number of registered members who must vote for the result to be valid.</span></dd>
+        </div>
+        <div>
+          <dt class="bi"><span lang="fr">Adoption</span><span lang="en">Passing rule</span></dt>
+          <dd class="bi"><span lang="fr">Majorité simple</span><span lang="en">Simple majority</span></dd>
+          <dd class="note bi"><span lang="fr">Plus de la moitié des votes exprimés est requise pour adopter la proposition.</span><span lang="en">More than half of the votes cast is required to pass the proposal.</span></dd>
+        </div>
+        <div>
+          <dt class="bi"><span lang="fr">Scrutin</span><span lang="en">Ballot type</span></dt>
+          <dd class="bi"><span lang="fr">Secret</span><span lang="en">Secret</span></dd>
+          <dd class="note bi"><span lang="fr">Le bulletin est enregistré sans le nom du votant.</span><span lang="en">The ballot is recorded without the voter’s name.</span></dd>
+        </div>
       </dl>
 
       <fieldset class="choices">
-        <legend class="sr-only">Votre choix / Your choice</legend>
+        <legend class="sr-only bi"><span lang="fr">Choix</span><span lang="en">Choice</span></legend>
         <div class="choice"><input type="radio" name="q1" id="c-for" value="for" required><label for="c-for"><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16" width="14" height="14" focusable="false"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="bi"><span lang="fr">Pour</span><span lang="en">In favour</span></span></label></div>
         <div class="choice"><input type="radio" name="q1" id="c-against" value="against"><label for="c-against"><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16" width="14" height="14" focusable="false"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="bi"><span lang="fr">Contre</span><span lang="en">Against</span></span></label></div>
-        <div class="choice"><input type="radio" name="q1" id="c-abstain" value="abstain"><label for="c-abstain"><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16" width="14" height="14" focusable="false"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="bi"><span lang="fr">Je m’abstiens</span><span lang="en">I abstain</span></span></label></div>
+        <div class="choice"><input type="radio" name="q1" id="c-abstain" value="abstain"><label for="c-abstain"><span class="mark" aria-hidden="true"><svg viewBox="0 0 16 16" width="14" height="14" focusable="false"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="bi"><span lang="fr">Abstention</span><span lang="en">Abstention</span></span></label></div>
       </fieldset>
-      <p class="error bi" id="choice-error" role="alert" hidden><span lang="fr">Choisissez une option pour continuer.</span><span lang="en">Choose an option to continue.</span></p>
+      <p class="error bi" id="choice-error" role="alert" hidden><span lang="fr">Aucune option sélectionnée. Sélectionner une option pour continuer.</span><span lang="en">No option selected. Select an option to continue.</span></p>
 
-      <p class="receipt bi"><span lang="fr">Un reçu vous sera remis après le vote.</span><span lang="en">You will get a receipt after you vote.</span></p>
+      <p class="receipt bi"><span lang="fr">Un code de reçu est affiché après l’envoi du bulletin.</span><span lang="en">A receipt code is displayed after the ballot is submitted.</span></p>
       </div>
 
       <div class="castbar">
-        <button class="cast" type="submit"><span class="bi"><span lang="fr">Voter</span><span lang="en">Cast my vote</span></span></button>
+        <button class="cast" type="submit"><span class="bi"><span lang="fr">Soumettre le bulletin</span><span lang="en">Submit ballot</span></span></button>
       </div>
-
-      <p class="privacy">
-        <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><rect x="4" y="9" width="12" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M6.5 9V6.5a3.5 3.5 0 017 0V9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-        <span class="bi"><span lang="fr">Votre choix n’est pas lié à votre nom.</span><span lang="en">Your choice is not linked to your name.</span></span>
-      </p>
     </form>
   </section>
 
 </main>
 
-<footer class="sample bi"><span lang="fr">Aperçu de développement. Organisation et chiffres d’exemple.</span><span lang="en">Development preview. Sample organization and figures.</span></footer>
+<footer class="sample bi"><span lang="fr">Aperçu de développement. L’organisation et les chiffres sont fictifs.</span><span lang="en">Development preview. The organization and figures are fictitious.</span></footer>
 </div>
 
 <aside class="settings" aria-labelledby="set-title">
-  <h2 id="set-title">Apparence de l’organisation <span class="sub">Organization appearance</span></h2>
-  <p class="settings__note">Aperçu seulement : chaque organisation choisira son modèle et ses couleurs. / Preview only: each organization will choose its template and colours.</p>
+  <h2 id="set-title" class="bi"><span lang="fr">Apparence de l’organisation</span><span lang="en">Organization appearance</span></h2>
+  <p class="settings__note bi"><span lang="fr">Aperçu uniquement. Chaque organisation choisit le modèle et les couleurs.</span><span lang="en">Preview only. Each organization chooses the template and the colours.</span></p>
 
   <fieldset class="settings__group">
-    <legend>Modèle · Template</legend>
-    <label class="opt"><input type="radio" name="theme" value="seed-packet" checked><span><b>Seed Packet</b><small>Bloc de couleur, grands choix · colour block, large choices</small></span></label>
-    <label class="opt"><input type="radio" name="theme" value="ballot-paper"><span><b>Ballot Paper</b><small>Bulletin réglé, talon · ruled slip, stub</small></span></label>
+    <legend class="bi"><span lang="fr">Modèle</span><span lang="en">Template</span></legend>
+    <label class="opt"><input type="radio" name="theme" value="seed-packet" checked><span><b>Seed Packet</b><small class="bi"><span lang="fr">Bloc de couleur, grands choix</span><span lang="en">Colour block, large choices</span></small></span></label>
+    <label class="opt"><input type="radio" name="theme" value="ballot-paper"><span><b>Ballot Paper</b><small class="bi"><span lang="fr">Bulletin réglé, talon de reçu</span><span lang="en">Ruled slip, receipt stub</span></small></span></label>
   </fieldset>
 
   <div class="settings__group">
     <div class="field">
-      <label for="brand">Couleur principale · Brand colour</label>
+      <label for="brand" class="bi"><span lang="fr">Couleur principale</span><span lang="en">Brand colour</span></label>
       <input type="color" id="brand" value="#1f5c46">
       <p class="check" id="brand-check" role="status"></p>
     </div>
     <div class="field">
-      <label for="accent">Couleur du bouton · Button colour</label>
+      <label for="accent" class="bi"><span lang="fr">Couleur du bouton</span><span lang="en">Button colour</span></label>
       <input type="color" id="accent" value="#c63a22">
       <p class="check" id="accent-check" role="status"></p>
     </div>
-    <button type="button" class="reset" id="reset">Réinitialiser · Reset</button>
+    <button type="button" class="reset bi" id="reset"><span lang="fr">Rétablir les valeurs par défaut</span><span lang="en">Reset to defaults</span></button>
   </div>
 </aside>
 </div>

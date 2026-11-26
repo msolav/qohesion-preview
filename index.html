@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" data-lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Qohesion · Aperçu de développement / Development preview</title>
+<title>Qohesion · Aperçu de développement</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#0F224C">
 <link rel="icon" href="prototype/assets/mark.svg" type="image/svg+xml">
@@ -11,10 +11,15 @@
 @font-face{font-family:"Figtree";src:url(assets/figtree-latin.woff2) format("woff2");font-weight:300 900;font-display:swap}
 *{box-sizing:border-box;margin:0}
 body{min-height:100vh;min-height:100dvh;background:#0F224C;color:#EAF2FF;font-family:Figtree,system-ui,sans-serif;line-height:1.5;display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;padding:48px 20px}
-.wrap{width:100%;max-width:38rem;display:grid;gap:36px}
-.logo{display:block;width:min(70vw,320px);height:auto}
-h1{font-size:1.5rem;font-weight:800;line-height:1.2;text-wrap:balance}
-h1 span{display:block;font-size:1rem;font-weight:500;color:#A9BEE6;margin-top:4px}
+.wrap{width:100%;max-width:38rem;display:grid;gap:32px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.logo{display:block;width:min(60vw,300px);height:auto}
+.lang{display:flex;border:1.5px solid #A9BEE6;border-radius:99px;overflow:hidden;font-size:.85rem;font-weight:700}
+.lang a{display:grid;place-items:center;min-width:2.9rem;min-height:2.75rem;color:#EAF2FF;text-decoration:none}
+.lang a[aria-current]{background:#EAF2FF;color:#0F224C}
+html[data-lang="fr"] [lang="en"]{display:none}
+html[data-lang="en"] [lang="fr"]{display:none}
+h1{font-size:1.5rem;font-weight:800;line-height:1.2}
 .note{color:#C9D8F2;font-size:.95rem}
 ul{list-style:none;padding:0;display:grid;gap:12px}
 li a{display:block;padding:16px 18px;border:1.5px solid #3A5287;border-radius:14px;color:#EAF2FF;text-decoration:none;transition:background .15s ease-out,border-color .15s ease-out}
@@ -30,23 +35,47 @@ footer a{color:#EAF2FF}
 </head>
 <body>
 <div class="wrap">
-<img class="logo" src="assets/logo-dark.svg" alt="Qohesion" width="320" height="58">
-<h1>Aperçu de développement <span lang="en">Development preview</span></h1>
-<p class="note">Travail en cours, avec une organisation et des chiffres d’exemple. Rien ici n’est final et aucun vote n’est enregistré. <span lang="en">Work in progress, with a sample organization and sample figures. Nothing here is final and no vote is recorded.</span></p>
+<div class="top">
+<img class="logo" src="assets/logo-dark.svg" alt="Qohesion" width="300" height="54">
+<nav class="lang" aria-label="Langue d’affichage">
+<a href="?lang=fr" data-lang-link="fr" aria-label="Français" aria-current="true">FR</a>
+<a href="?lang=en" data-lang-link="en" aria-label="English">EN</a>
+</nav>
+</div>
+<h1><span lang="fr">Aperçu de développement</span><span lang="en">Development preview</span></h1>
+<p class="note"><span lang="fr">Cette page donne accès aux versions de travail du logiciel. Le contenu est incomplet, l’organisation et les chiffres sont fictifs, et aucun vote n’est enregistré.</span><span lang="en">This page gives access to working versions of the software. The content is incomplete, the organization and figures are fictitious, and no vote is recorded.</span></p>
 
 <section aria-labelledby="s1">
-<h2 id="s1">Écran de vote <span lang="en">· Voter ballot screen</span></h2>
+<h2 id="s1"><span lang="fr">Écran de vote</span><span lang="en">Voter ballot screen</span></h2>
 <ul>
-<li><a href="prototype/?theme=seed-packet&amp;lang=both"><b>Seed Packet</b><small>Bloc de couleur et grands choix <span lang="en">· Colour block and large choices</span></small></a></li>
-<li><a href="prototype/?theme=ballot-paper&amp;lang=both"><b>Ballot Paper</b><small>Bulletin réglé et talon de reçu <span lang="en">· Ruled slip and receipt stub</span></small></a></li>
+<li><a href="prototype/?theme=seed-packet" data-proto><b>Seed Packet</b><small><span lang="fr">Modèle à bloc de couleur et grands choix.</span><span lang="en">Template with a colour block and large choices.</span></small></a></li>
+<li><a href="prototype/?theme=ballot-paper" data-proto><b>Ballot Paper</b><small><span lang="fr">Modèle à bulletin réglé et talon de reçu.</span><span lang="en">Template with a ruled slip and a receipt stub.</span></small></a></li>
 </ul>
 </section>
 
 <footer>
-<span>Version 504e521 · 2026-11-26 01:04 UTC</span>
-<a href="https://github.com/msolav/qohesion">Code source <span lang="en">· Source code</span></a>
+<span><span lang="fr">Version</span><span lang="en">Build</span> f06a87b, 2026-11-26 04:03 UTC</span>
+<a href="https://github.com/msolav/qohesion"><span lang="fr">Code source</span><span lang="en">Source code</span></a>
 <a href="https://qohesion.app">qohesion.app</a>
 </footer>
 </div>
+<script>
+(function(){
+  var q=new URLSearchParams(location.search).get("lang"), lang="fr";
+  if(q==="fr"||q==="en"){lang=q}else{
+    var l=navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||""];
+    for(var i=0;i<l.length;i++){var c=String(l[i]).toLowerCase();if(c.indexOf("fr")===0){lang="fr";break}if(c.indexOf("en")===0){lang="en";break}}
+  }
+  function set(next){
+    lang=next;document.documentElement.setAttribute("data-lang",lang);document.documentElement.setAttribute("lang",lang);
+    document.title=lang==="fr"?"Qohesion · Aperçu de développement":"Qohesion · Development preview";
+    document.querySelector(".lang").setAttribute("aria-label",lang==="fr"?"Langue d’affichage":"Display language");
+    [].forEach.call(document.querySelectorAll("[data-lang-link]"),function(a){if(a.getAttribute("data-lang-link")===lang)a.setAttribute("aria-current","true");else a.removeAttribute("aria-current")});
+    [].forEach.call(document.querySelectorAll("[data-proto]"),function(a){var u=new URL(a.getAttribute("href"),location.href);u.searchParams.set("lang",lang);a.setAttribute("href",u.pathname.split("/").slice(-2).join("/")+u.search)});
+  }
+  [].forEach.call(document.querySelectorAll("[data-lang-link]"),function(a){a.addEventListener("click",function(e){e.preventDefault();set(a.getAttribute("data-lang-link"))})});
+  set(lang);
+})();
+</script>
 </body>
 </html>

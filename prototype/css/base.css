@@ -30,10 +30,8 @@ img,svg{display:block}
 
 /* Bilingual text: French first, English beneath, or either alone */
 .bi>[lang="fr"],.bi>[lang="en"]{display:block}
-.bi>[lang="en"]{font-size:.84em;font-weight:400;color:var(--ink-2);line-height:1.3}
 html[data-lang="fr"] [lang="en"]{display:none}
 html[data-lang="en"] [lang="fr"]{display:none}
-html[data-lang="en"] .bi>[lang="en"]{font-size:inherit;font-weight:inherit;color:inherit;line-height:inherit}
 
 /* Layout */
 .stage{min-height:100vh;min-height:100dvh;display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;align-content:start;gap:var(--space-6);padding-bottom:var(--space-6)}
@@ -56,17 +54,17 @@ html.js .lang{display:flex}
 
 /* Question */
 .ballot__head h1{font-size:clamp(1.6rem,6.2vw,2.05rem);line-height:1.1;font-weight:800;letter-spacing:-.01em;text-wrap:balance}
-.ballot__head h1.bi>[lang="en"]{font-size:.55em;font-weight:500;letter-spacing:0;margin-top:var(--space-2)}
 .lede{margin-top:var(--space-4);font-size:1rem}
 .when{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3) var(--space-4);margin-top:var(--space-4);font-weight:600}
 .steps{display:flex;gap:var(--space-2)}
 .steps li{width:1.9rem;height:1.9rem;border-radius:50%;display:grid;place-items:center;font-size:.8rem;font-weight:700;border:1.5px solid currentColor;padding:2px}
 
-.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(6.5rem,1fr))}
-.facts dt{font-size:.8rem;font-weight:600;color:var(--ink-2)}
-.facts dt.bi>[lang="en"]{font-size:1em;font-weight:400}
-.facts dd{margin-top:var(--space-1);font-weight:700;font-size:1rem;line-height:1.25}
-.facts dd.bi>[lang="en"]{font-size:.8rem;font-weight:400}
+.facts{display:grid;grid-template-columns:minmax(0,1fr)}
+.facts>div{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:var(--space-4);row-gap:var(--space-1);align-items:baseline}
+.facts>div+div{border-top:1px solid var(--line-soft)}
+.facts dt{font-size:.9rem;font-weight:700}
+.facts dd{margin:0;font-weight:700;font-size:1rem;line-height:1.25;text-align:right}
+.facts dd.note{grid-column:1 / -1;text-align:left;font-weight:400;font-size:.88rem;line-height:1.35;color:var(--ink-2)}
 
 /* Choices: the real radio covers the row, so the whole row is the target */
 .choices{display:grid}
@@ -77,14 +75,12 @@ html.js .lang{display:flex}
 .mark{flex:none;display:grid;place-items:center;width:1.7rem;height:1.7rem;border-radius:50%;border:2px solid currentColor}
 
 .error{margin-top:var(--space-3);font-weight:700;color:var(--danger)}
-.error>[lang="en"]{color:var(--danger)}
 .error[hidden]{display:none}
 .receipt{margin-top:var(--space-4);font-size:.9rem;color:var(--ink-2)}
 
 /* Cast bar stays reachable on tall content */
 .castbar{position:sticky;bottom:0;z-index:2;margin:var(--space-4) calc(var(--space-4) * -1) 0;padding:var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom,0px));background:var(--bg);box-shadow:0 -10px 16px -12px rgba(20,21,26,.28)}
 .cast{width:100%;min-height:3.6rem;padding:var(--space-2) var(--space-4);border:0;border-radius:var(--radius);background:var(--accent);color:var(--on-accent);font:inherit;font-size:1.1rem;font-weight:800;line-height:1.2;text-align:center;cursor:pointer;transition:filter .15s ease-out,transform .15s ease-out}
-.cast .bi>[lang="en"]{color:inherit;font-size:.8rem;font-weight:500}
 .cast:hover{filter:brightness(.93)}
 .cast:active{transform:translateY(1px)}
 .cast:disabled{opacity:.5;cursor:not-allowed}
@@ -101,7 +97,8 @@ html.js .lang{display:flex}
 .done__icon{margin:0 auto var(--space-4);color:var(--brand)}
 .done h2{font-size:1.6rem;font-weight:800;line-height:1.15;text-wrap:balance}
 .done__text{margin:var(--space-3) auto 0;max-width:26rem}
-.done__code{margin-top:var(--space-5);padding:var(--space-4);font-size:1.5rem;font-weight:800;letter-spacing:.12em;border:2px dashed var(--ink);border-radius:var(--radius)}
+.done__label{margin-top:var(--space-5);font-size:.9rem;font-weight:700}
+.done__code{margin-top:var(--space-2);padding:var(--space-4);font-size:1.5rem;font-weight:800;letter-spacing:.12em;border:2px dashed var(--ink);border-radius:var(--radius)}
 .done__next{margin-top:var(--space-5);font-weight:700}
 
 /* Organization appearance panel: preview only, needs JavaScript */
