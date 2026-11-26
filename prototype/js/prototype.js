@@ -79,7 +79,17 @@
   el.brand.value = (query.get("brand") ? "#" + query.get("brand").replace("#", "") : DEFAULTS[startTheme] ? DEFAULTS[startTheme].brand : "#1F5C46").toLowerCase();
   el.accent.value = (query.get("accent") ? "#" + query.get("accent").replace("#", "") : DEFAULTS[startTheme] ? DEFAULTS[startTheme].accent : "#C63A22").toLowerCase();
   setTheme(startTheme, false);
-  setLang(query.get("lang") || "both");
+  /* No language in the URL: follow the browser. French or English if preferred, both when it is neither. */
+  function detectLang() {
+    var list = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ""];
+    for (var i = 0; i < list.length; i++) {
+      var c = String(list[i]).toLowerCase();
+      if (c.indexOf("fr") === 0) return "fr";
+      if (c.indexOf("en") === 0) return "en";
+    }
+    return "both";
+  }
+  setLang(query.get("lang") || detectLang());
 
   /* ---- controls ---- */
   Array.prototype.forEach.call(el.themes, function (r) { r.addEventListener("change", function () { setTheme(r.value, true); }); });
