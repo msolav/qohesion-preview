@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tarifs (ébauche) · Qohesion</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#EEF3E9">
+<link rel="icon" href="../../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../site.css">
+</head>
+<body>
+<a class="skip" href="#main">Passer au contenu</a>
+<header class="top">
+<a class="logo" href="../" aria-label="Qohesion, accueil"><img src="../../assets/logo.svg" alt="Qohesion" width="155" height="28"></a>
+<nav class="nav" aria-label="Navigation principale">
+<a href="./" aria-current="page">Tarifs</a>
+<a href="../../docs/">Documentation</a>
+</nav>
+<nav class="lang" aria-label="Langue d’affichage"><a href="./" lang="fr" aria-label="Français" aria-current="true">FR</a><a href="../../en/pricing/" lang="en" aria-label="English">EN</a></nav>
+</header>
+<p class="notice">Version de travail. Le contenu peut changer avant la publication.</p>
+<div class="page wide">
+<main id="main">
+<div class="head">
+<h1>Tarifs (ébauche)</h1>
+</div>
+<div class="slip">
+<p>Ébauche, proposée dans l’<a href="../../docs/adr/0006-pricing-and-limits.html">ADR 0006</a> (en anglais). Le service hébergé n’existe pas encore, rien ne peut être acheté, et les prix sont un point de départ, non définitif. Les montants sont en dollars canadiens, avant taxes. Cette page décrit des offres prévues.</p>
+<h2 id="les-offres">Les offres</h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table"><table class="compare">
+<thead>
+<tr>
+<th><span class="sr-only">Item</span></th>
+<th>Gratuit</th>
+<th>Forfait par scrutin</th>
+<th>Auto-hébergé</th>
+</tr>
+</thead>
+<tbody><tr><th scope="row">Prix</th>
+<td>0 $</td>
+<td>Un paiement par scrutin, selon la taille (voir plus bas)</td>
+<td>0 $ pour le logiciel</td>
+</tr>
+<tr><th scope="row">Utilisation</th>
+<td>Les petits sondages</td>
+<td>Un vote ou un sondage sur le service hébergé, jusqu’à 5 000 adresses sur la liste</td>
+<td>Faire fonctionner le logiciel sur le serveur de l’organisation</td>
+</tr>
+<tr><th scope="row">Taille de la liste</th>
+<td>Jusqu’à 50 participants par scrutin</td>
+<td>Jusqu’à la taille payée</td>
+<td>Aucune limite fixée par le logiciel</td>
+</tr>
+<tr><th scope="row">Scrutins</th>
+<td>Autant que l’allocation mensuelle de courriels de vérification le permet</td>
+<td>Un scrutin par forfait</td>
+<td>Aucune limite fixée par le logiciel</td>
+</tr>
+<tr><th scope="row">Courriels de vérification</th>
+<td>Un par participant, dans la limite de l’allocation mensuelle</td>
+<td>Un par participant, inclus [rappels: à définir]</td>
+<td>Envoyés par le service de courriel de l’organisation</td>
+</tr>
+<tr><th scope="row">Fonctions</th>
+<td>Toutes</td>
+<td>Toutes</td>
+<td>Toutes</td>
+</tr>
+<tr><th scope="row">Lieu de conservation des données</th>
+<td>Le service hébergé [lieu: à définir]</td>
+<td>Le service hébergé [lieu: à définir]</td>
+<td>Le serveur de l’organisation</td>
+</tr>
+<tr><th scope="row">Soutien</th>
+<td>Suivi public des problèmes</td>
+<td>Courriel [délai de réponse: à définir]</td>
+<td>Suivi public des problèmes. Le soutien payant est offert sur soumission</td>
+</tr>
+</tbody></table>
+</div>
+<h2 id="tailles-du-forfait-par-scrutin">Tailles du forfait par scrutin</h2>
+<p>La taille correspond au nombre d’adresses sur la liste des votants.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table"><table class="pricelist">
+<thead>
+<tr>
+<th>Adresses sur la liste</th>
+<th>Prix</th>
+</tr>
+</thead>
+<tbody><tr><th scope="row">Jusqu’à 100</th>
+<td>19 $</td>
+</tr>
+<tr><th scope="row">Jusqu’à 300</th>
+<td>39 $</td>
+</tr>
+<tr><th scope="row">Jusqu’à 1 000</th>
+<td>99 $</td>
+</tr>
+<tr><th scope="row">Jusqu’à 5 000</th>
+<td>249 $</td>
+</tr>
+<tr><th scope="row">Plus de 5 000</th>
+<td>Sur soumission</td>
+</tr>
+</tbody></table>
+</div>
+<h2 id="identique-dans-toutes-les-offres">Identique dans toutes les offres</h2>
+<ul>
+<li>Le logiciel et toutes ses fonctions. Un paiement change les limites, l’hébergement et le soutien. Il ne débloque jamais une fonction.</li>
+<li>La licence: le code est sous AGPL-3.0 ou ultérieure, et les <a href="../conditions/">conditions d’utilisation</a> permettent à une organisation de fermer son compte et d’exporter toutes ses données en tout temps.</li>
+<li>Les codes de reçu et la vérification du résultat.</li>
+</ul>
+<h2 id="ce-qu-est-un-scrutin">Ce qu’est un scrutin</h2>
+<p>Un scrutin est un vote ou un sondage avec sa liste de votants, ouvert au plus [30 jours]. Un second vote avec la même liste est un second scrutin. [À définir: si le forfait couvre un second tour du même vote.]</p>
+<h2 id="points-a-decider">Points à décider</h2>
+<ul>
+<li>Si la taille est fixée au paiement ou si elle monte quand les ajouts tardifs la dépassent.</li>
+<li>Un rabais pour les groupes bénévoles, et la preuve d’admissibilité.</li>
+<li>L’affichage des taxes.</li>
+<li>Un forfait annuel, qui n’est pas offert au lancement.</li>
+</ul>
+<p>Le raisonnement, les chiffres qui appuient les prix et les questions ouvertes figurent dans l’<a href="../../docs/adr/0006-pricing-and-limits.html">ADR 0006</a> (en anglais).</p>
+
+</div>
+</main>
+</div>
+<footer class="foot">
+<nav aria-label="Navigation principale">
+<a href="../conditions/">Conditions d’utilisation</a>
+<a href="../marque/">Nom et logo</a>
+<a href="../../docs/">Documentation (en anglais)</a>
+<a href="https://github.com/msolav/qohesion">Code source</a>
+</nav>
+<p>Construit à partir de 72d0404, 2026-11-26 19:19 UTC. <a href="https://github.com/msolav/qohesion/blob/main/docs/pricing.md">Source de cette page</a></p>
+</footer>
+</body>
+</html>

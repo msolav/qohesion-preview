@@ -3,24 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Legal review brief · Qohesion documents</title>
+<title>Legal review brief · Qohesion</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
-<meta name="theme-color" content="#E9E9E3">
-<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
-<link rel="stylesheet" href="docs.css">
+<meta name="theme-color" content="#EEF3E9">
+<link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../site.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="bar">
-<a href="index.html"><img src="assets/mark.svg" alt="" width="24" height="24"><span>Documents</span></a>
-<a href="../">Development preview</a>
+<header class="top">
+<a class="logo" href="../en/" aria-label="Qohesion, home"><img src="../assets/logo.svg" alt="Qohesion" width="155" height="28"></a>
+<nav class="nav" aria-label="Main navigation">
+<a href="../en/pricing/">Pricing</a>
+<a href="./" aria-current="page">Documentation</a>
+</nav>
+
 </header>
-<p class="draft">Working drafts for review. The content can change before release.</p>
-<main id="main" class="sheet">
-<h1 id="legal-review-brief">Legal review brief</h1>
+<p class="notice">Working version. The content can change before release.</p>
+<div class="page">
+<main id="main">
+<div class="head">
+<h1>Legal review brief</h1>
+</div>
+<div class="slip">
 <p>Status: draft, to be sent to counsel in Quebec once the questions below are agreed. This brief is not legal advice and does not state what the law requires. Every point is a question, and each answer is expected from counsel.</p>
-<p>Résumé : liste des questions à soumettre à un conseiller juridique du Québec avant l’ouverture du service hébergé. Les sections sont classées par ordre de priorité. Ce document ne contient aucun avis juridique.</p>
 <h2 id="what-qohesion-is">What Qohesion is</h2>
 <p>Qohesion is open-source software (AGPL-3.0-or-later) for holding votes and polls in groups such as associations, cooperatives and unions, in French and English. It runs in three modes on one code base (Light, Full web, Self-hosted, see <a href="adr/0003-three-modes-one-engine.html">ADR 0003</a>). The project also plans an official hosted service, run by an operator who has not yet been named, free within limits and paid beyond them (<a href="adr/0006-pricing-and-limits.html">ADR 0006</a>, proposed). Nothing is hosted for the public yet, no vote can be recorded, and no personal data is held.</p>
 <h2 id="what-exists-to-read">What exists to read</h2>
@@ -31,7 +38,7 @@
 <th>What it contains</th>
 </tr>
 </thead>
-<tbody><tr><th scope="row"><a href="terms-of-use.html">terms-of-use.md</a></th>
+<tbody><tr><th scope="row"><a href="../en/terms/">terms-of-use.md</a></th>
 <td>Draft bilingual terms of the hosted service, with placeholders for the operator</td>
 </tr>
 <tr><th scope="row"><a href="privacy.html">privacy.md</a></th>
@@ -46,7 +53,7 @@
 <tr><th scope="row"><a href="adr/0002-editions-hosting-and-trust.html">adr/0002</a>, <a href="adr/0003-three-modes-one-engine.html">0003</a></th>
 <td>Editions, trust model, registration roll, email safeguards, cross-organization checks</td>
 </tr>
-<tr><th scope="row"><a href="trademark-policy.html">trademark-policy.md</a></th>
+<tr><th scope="row"><a href="../en/brand/">trademark-policy.md</a></th>
 <td>Draft name and logo policy</td>
 </tr>
 <tr><th scope="row"><a href="https://github.com/msolav/qohesion/blob/main/LICENSING.md">LICENSING.md</a></th>
@@ -73,7 +80,7 @@
 <ol start="6">
 <li><strong>Terms of sale.</strong> Refunds, the event pass, and the payment processor&#39;s terms, as proposed in ADR 0006. If an annual plan is added later, which consumer-law rules on renewal apply?</li>
 <li><strong>Taxes.</strong> Registration thresholds and treatment of GST and QST. This may be a question for an accountant instead.</li>
-<li><strong>Trademark.</strong> Review of the <a href="trademark-policy.html">draft policy</a>; who should own the marks (the operator or an individual); when and where to register; and how to handle a look-alike service.</li>
+<li><strong>Trademark.</strong> Review of the <a href="../en/brand/">draft policy</a>; who should own the marks (the operator or an individual); when and where to register; and how to handle a look-alike service.</li>
 </ol>
 <h3 id="c-about-what-the-software-says-and-holds">C. About what the software says and holds</h3>
 <ol start="9">
@@ -87,11 +94,17 @@
 <h2 id="what-to-ask-counsel-for">What to ask counsel for</h2>
 <p>A fixed fee for group A first, with a written list of changes to the terms and the privacy documents. Groups B and C can follow once the operator and the prices are settled.</p>
 
+</div>
 </main>
+</div>
 <footer class="foot">
-<span>Built from ea13917, 2026-11-26 18:35 UTC</span>
-<a href="https://github.com/msolav/qohesion/blob/main/docs/legal-review-brief.md">Source of this page</a>
+<nav aria-label="Main navigation">
+<a href="../en/terms/">Terms of use</a>
+<a href="../en/brand/">Name and logo</a>
+<a href="./">Documentation</a>
 <a href="https://github.com/msolav/qohesion">Source code</a>
+</nav>
+<p>Built from 72d0404, 2026-11-26 19:19 UTC. <a href="https://github.com/msolav/qohesion/blob/main/docs/legal-review-brief.md">Source of this page</a></p>
 </footer>
 </body>
 </html>
