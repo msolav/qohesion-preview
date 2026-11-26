@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pricing tiers (draft) · Qohesion documents</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#E9E9E3">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+<a href="index.html"><img src="assets/mark.svg" alt="" width="24" height="24"><span>Documents</span></a>
+<a href="../">Development preview</a>
+</header>
+<p class="draft">Working drafts for review. The content can change before release.</p>
+<main id="main" class="sheet wide">
+<h1 id="pricing-tiers-draft">Pricing tiers (draft)</h1>
+<p>Status: draft. Proposed in <a href="adr/0006-pricing-and-limits.html">ADR 0006</a>. The hosted service does not exist yet, nothing can be purchased, and the prices are a starting point that is not final. Amounts are in Canadian dollars before tax. This page describes planned offers. French version: to come.</p>
+<h2 id="the-offers">The offers</h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table"><table>
+<thead>
+<tr>
+<th><span class="sr-only">Item</span></th>
+<th>Free</th>
+<th>Event pass</th>
+<th>Self-hosted</th>
+</tr>
+</thead>
+<tbody><tr><th scope="row">Price</th>
+<td>0</td>
+<td>One payment per voting event, by size (see below)</td>
+<td>0 for the software</td>
+</tr>
+<tr><th scope="row">Used for</th>
+<td>Small polls</td>
+<td>A vote or poll on the hosted service, up to 5,000 addresses on the roll</td>
+<td>Running the software on the organization&#39;s own server</td>
+</tr>
+<tr><th scope="row">Roll size</th>
+<td>Up to 50 participants a poll</td>
+<td>Up to the size paid for</td>
+<td>No limit set by the software</td>
+</tr>
+<tr><th scope="row">Events</th>
+<td>As many as the monthly allowance of verification emails permits</td>
+<td>One event per pass</td>
+<td>No limit set by the software</td>
+</tr>
+<tr><th scope="row">Verification emails</th>
+<td>One per participant, within the monthly allowance</td>
+<td>One per participant, included [reminders: to define]</td>
+<td>Sent through the organization&#39;s own SMTP service</td>
+</tr>
+<tr><th scope="row">Features</th>
+<td>All</td>
+<td>All</td>
+<td>All</td>
+</tr>
+<tr><th scope="row">Where data is kept</th>
+<td>The hosted service [location: to define]</td>
+<td>The hosted service [location: to define]</td>
+<td>The organization&#39;s own server</td>
+</tr>
+<tr><th scope="row">Support</th>
+<td>Public issue tracker</td>
+<td>Email [response time: to define]</td>
+<td>Public issue tracker. Paid support is quoted</td>
+</tr>
+</tbody></table>
+</div>
+<h2 id="event-pass-sizes">Event pass sizes</h2>
+<p>The size is the number of addresses on the roll.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table"><table>
+<thead>
+<tr>
+<th>Addresses on the roll</th>
+<th>Price</th>
+</tr>
+</thead>
+<tbody><tr><th scope="row">Up to 100</th>
+<td>19</td>
+</tr>
+<tr><th scope="row">Up to 300</th>
+<td>39</td>
+</tr>
+<tr><th scope="row">Up to 1,000</th>
+<td>99</td>
+</tr>
+<tr><th scope="row">Up to 5,000</th>
+<td>249</td>
+</tr>
+<tr><th scope="row">More than 5,000</th>
+<td>Quoted</td>
+</tr>
+</tbody></table>
+</div>
+<h2 id="the-same-in-every-offer">The same in every offer</h2>
+<ul>
+<li>The software and all of its features. A payment changes limits, hosting and support. It never unlocks a feature.</li>
+<li>The licence: the code is under the AGPL-3.0-or-later, and the <a href="terms-of-use.html">terms of use</a> allow an organization to close its account and export all of its data at any time.</li>
+<li>Receipt codes and verification of the result.</li>
+</ul>
+<h2 id="what-counts-as-an-event">What counts as an event</h2>
+<p>An event is one vote or poll with its roll, open for at most [30 days]. A second vote with the same roll is a second event. [To define: whether the pass covers a second round of the same vote.]</p>
+<h2 id="not-decided">Not decided</h2>
+<ul>
+<li>Whether the size is fixed at payment or moves up if late additions exceed it.</li>
+<li>A discount for volunteer-run groups, and what proves eligibility.</li>
+<li>Display of taxes.</li>
+<li>An annual plan, which is not offered at launch.</li>
+</ul>
+<p>The reasoning, the figures that support the prices and the open questions are in <a href="adr/0006-pricing-and-limits.html">ADR 0006</a>.</p>
+
+</main>
+<footer class="foot">
+<span>Built from ea13917, 2026-11-26 18:35 UTC</span>
+<a href="https://github.com/msolav/qohesion/blob/main/docs/pricing.md">Source of this page</a>
+<a href="https://github.com/msolav/qohesion">Source code</a>
+</footer>
+</body>
+</html>

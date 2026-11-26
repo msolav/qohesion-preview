@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADR 0001: Stack and deployment · Qohesion documents</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#E9E9E3">
+<link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../docs.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+<a href="../index.html"><img src="../assets/mark.svg" alt="" width="24" height="24"><span>Documents</span></a>
+<a href="../../">Development preview</a>
+</header>
+<p class="draft">Working drafts for review. The content can change before release.</p>
+<main id="main" class="sheet">
+<h1 id="adr-0001-stack-and-deployment">ADR 0001: Stack and deployment</h1>
+<ul>
+<li>Status: accepted for the stack (SvelteKit, TypeScript, PostgreSQL, Docker Compose), confirmed 2026-11-25. Still open: the migration tool or ORM, the cryptography library, and whether to support SQLite.</li>
+<li>Date: 2026-11-25</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>Target installers are volunteers at small organizations, not system administrators. They need one command to install, simple backups and safe upgrades on a low-cost VPS.</p>
+<h2 id="decision">Decision</h2>
+<ul>
+<li><strong>TypeScript</strong> end to end, to keep the contributor barrier low.</li>
+<li><strong>SvelteKit</strong> (Node adapter) for the web app: small bundles, good accessibility primitives, server-rendered by default so the interface works on old phones and weak connections.</li>
+<li><strong>PostgreSQL</strong> as the only datastore. Row-level constraints enforce one-credential-one-ballot.</li>
+<li><strong>Docker Compose</strong> as the supported install path: <code>app</code> + <code>postgres</code> + optional <code>caddy</code> for automatic HTTPS. Single image, versioned tags.</li>
+<li><strong>SMTP</strong> configured by environment variables, with a built-in &quot;send test email&quot; check. No bundled mail server.</li>
+<li><strong>i18n</strong>: ICU message format, locale files in the repo, plus a database override layer so admins can edit wording without a rebuild.</li>
+<li><strong>No external network calls</strong> at runtime other than SMTP.</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>Easy contribution and hosting, at the cost of requiring Docker.</li>
+<li>Revisit if installers push back on Docker; a plain systemd package is a possible second target.</li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<p>Choice of ORM/migration tool; crypto library for ballot hashing; whether to support SQLite for tiny instances.</p>
+
+</main>
+<footer class="foot">
+<span>Built from ea13917, 2026-11-26 18:35 UTC</span>
+<a href="https://github.com/msolav/qohesion/blob/main/docs/adr/0001-stack-and-deployment.md">Source of this page</a>
+<a href="https://github.com/msolav/qohesion">Source code</a>
+</footer>
+</body>
+</html>

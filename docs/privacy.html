@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy approach: Law 25 (Quebec) and GDPR · Qohesion documents</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#E9E9E3">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+<a href="index.html"><img src="assets/mark.svg" alt="" width="24" height="24"><span>Documents</span></a>
+<a href="../">Development preview</a>
+</header>
+<p class="draft">Working drafts for review. The content can change before release.</p>
+<main id="main" class="sheet">
+<h1 id="privacy-approach-law-25-quebec-and-gdpr">Privacy approach: Law 25 (Quebec) and GDPR</h1>
+<blockquote>
+<p>This document states design intentions and a compliance checklist. It is not legal advice. Each organization that installs Qohesion is the <strong>data controller</strong> (<em>responsable du traitement</em> / <em>organisation</em>) and remains responsible for its own compliance. Have a lawyer review before relying on it. Items marked <strong>[verify]</strong> need legal confirmation.</p>
+</blockquote>
+<h2 id="roles">Roles</h2>
+<ul>
+<li>The <strong>organization</strong> running an instance is the controller. The Qohesion project does not host or receive any instance data.</li>
+<li>Qohesion ships no telemetry, no third-party trackers, no external fonts or CDNs. An instance only talks to the organization&#39;s own SMTP server.</li>
+</ul>
+<h2 id="principles-we-build-to">Principles we build to</h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table"><table>
+<thead>
+<tr>
+<th>Principle</th>
+<th>Law 25 (Quebec)</th>
+<th>GDPR</th>
+<th>Design response</th>
+</tr>
+</thead>
+<tbody><tr><th scope="row">Accountability</th>
+<td>Person in charge of personal information protection (<em>responsable de la protection des renseignements personnels</em>), publish governance policies</td>
+<td>Art. 5(2), 24, DPO where required</td>
+<td>Admin setting naming the privacy officer; their contact shown on every public page; policy template editable and published in-app</td>
+</tr>
+<tr><th scope="row">Consent and purpose</th>
+<td>Clear, specific consent, in plain language</td>
+<td>Art. 6, 7</td>
+<td>Consent records with timestamp, purpose and text version; separate consents for optional uses; no pre-ticked boxes</td>
+</tr>
+<tr><th scope="row">Minimization</th>
+<td>Collect only what is necessary</td>
+<td>Art. 5(1)(c)</td>
+<td>Only email and display name required. Every other member field is optional and admin-defined, with a stated purpose</td>
+</tr>
+<tr><th scope="row">Privacy by default</th>
+<td>Highest-privacy settings by default</td>
+<td>Art. 25</td>
+<td>Secret ballot default for new votes; results visibility defaults to aggregate only</td>
+</tr>
+<tr><th scope="row">Retention limits</th>
+<td>Destroy or anonymize when purpose is fulfilled</td>
+<td>Art. 5(1)(e)</td>
+<td>Configurable retention schedule per data class; scheduled purge job; ballots anonymized after the challenge period</td>
+</tr>
+<tr><th scope="row">Access and portability</th>
+<td>Access, rectification, portability in a structured, commonly used format</td>
+<td>Art. 15, 16, 20</td>
+<td>Member self-service export (JSON and CSV), rectification form</td>
+</tr>
+<tr><th scope="row">Erasure</th>
+<td>Cessation of dissemination and de-indexation rights <strong>[verify scope]</strong></td>
+<td>Art. 17</td>
+<td>Erasure workflow that preserves the integrity of past tallies (see below)</td>
+</tr>
+<tr><th scope="row">Security</th>
+<td>Reasonable safeguards</td>
+<td>Art. 32</td>
+<td>See <a href="threat-model.html">threat-model.md</a>: encryption at rest and in transit, hashed credentials, least-privilege roles</td>
+</tr>
+<tr><th scope="row">Incidents</th>
+<td>Keep a register of confidentiality incidents; notify the CAI and affected persons when there is a risk of serious injury</td>
+<td>Art. 33, 34 (72 hours to the authority)</td>
+<td>Incident register in the admin UI with a notification template for the CAI and members</td>
+</tr>
+<tr><th scope="row">Impact assessments</th>
+<td>Privacy impact assessment (<em>évaluation des facteurs relatifs à la vie privée</em>) for projects involving personal information systems <strong>[verify]</strong></td>
+<td>Art. 35</td>
+<td>Pre-filled PIA / DPIA template shipped in <code>docs/templates/</code></td>
+</tr>
+<tr><th scope="row">Records</th>
+<td>Inventory of personal information held</td>
+<td>Art. 30</td>
+<td>Auto-generated record of processing from the instance configuration</td>
+</tr>
+<tr><th scope="row">Transfers</th>
+<td>Assess before sending outside Quebec</td>
+<td>Chapter V</td>
+<td>Everything stays on the organization&#39;s server; the only external hop is the SMTP provider, which the admin must declare</td>
+</tr>
+<tr><th scope="row">Language</th>
+<td>Interface and policies available in French (Charter of the French language)</td>
+<td>n/a</td>
+<td>French is a first-class locale and the default; policies always rendered in French and English</td>
+</tr>
+</tbody></table>
+</div>
+<h2 id="the-hard-problem-erasure-vs-a-verifiable-vote">The hard problem: erasure vs. a verifiable vote</h2>
+<p>A vote needs an auditable tally. A privacy law gives people erasure rights. Qohesion resolves this by separating <strong>identity</strong> from <strong>ballot</strong>:</p>
+<ol>
+<li><strong>Who voted</strong> (the participation record, linked to a member) is stored separately from <strong>what was voted</strong> (the ballot, linked to nothing).</li>
+<li>For secret ballots there is no stored link between a member and their choice. Erasing a member removes their participation record and personal data; the anonymous ballot stays, since it is no longer personal information.</li>
+<li>For open ballots (recorded votes, for example a board resolution where each director&#39;s vote is minuted), the choice is personal information and is governed by the retention schedule and by the minutes the organization is legally required to keep. <strong>[verify]</strong></li>
+<li>After the challenge period set by the organization, the linkage data used during voting (tokens, timestamps fine enough to correlate) is deleted.</li>
+</ol>
+<p>The exact guarantees and their limits are in the <a href="threat-model.html">threat model</a>. Where a guarantee depends on trusting the server administrator, we say so.</p>
+<h2 id="what-an-installing-organization-must-still-do">What an installing organization must still do</h2>
+<ul>
+<li>Name a person in charge of personal information protection and publish their contact.</li>
+<li>Adopt and publish a privacy policy (a template is provided).</li>
+<li>Complete the PIA for their own context.</li>
+<li>Choose an SMTP provider and assess where it processes data.</li>
+<li>Set retention periods that match its by-laws and legal minutes requirements.</li>
+<li>Secure and back up the server.</li>
+</ul>
+<h2 id="sources-to-review-with-counsel">Sources to review with counsel</h2>
+<ul>
+<li><em>Act respecting the protection of personal information in the private sector</em> (CQLR c P-39.1), as amended by Law 25</li>
+<li>Regulation (EU) 2016/679 (GDPR)</li>
+<li><em>Charter of the French language</em> (CQLR c C-11)</li>
+<li>The statute and by-laws governing each organization, for example the <em>Loi sur les coopératives</em> (CQLR c C-67.2), the <em>Loi sur les compagnies</em> Part III for non-profit corporations (CQLR c C-38), or the <em>Code du travail</em> for unions (CQLR c C-27) <strong>[verify]</strong></li>
+<li>Commission d&#39;accès à l&#39;information du Québec guidance on incidents and PIAs</li>
+</ul>
+
+</main>
+<footer class="foot">
+<span>Built from ea13917, 2026-11-26 18:35 UTC</span>
+<a href="https://github.com/msolav/qohesion/blob/main/docs/privacy.md">Source of this page</a>
+<a href="https://github.com/msolav/qohesion">Source code</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Threat model (draft) · Qohesion documents</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#E9E9E3">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+<a href="index.html"><img src="assets/mark.svg" alt="" width="24" height="24"><span>Documents</span></a>
+<a href="../">Development preview</a>
+</header>
+<p class="draft">Working drafts for review. The content can change before release.</p>
+<main id="main" class="sheet">
+<h1 id="threat-model-draft">Threat model (draft)</h1>
+<p>Voting software for small organizations does not face nation-state adversaries. It faces a curious administrator, a disgruntled member, a stolen laptop, a phished email account and a misconfigured server. We design for those first and say plainly what we do not defend against.</p>
+<h2 id="assets">Assets</h2>
+<ol>
+<li>Integrity of results (nobody can add, remove or change ballots).</li>
+<li>Eligibility (only entitled members vote, once per ballot).</li>
+<li>Ballot secrecy, when the vote is configured as secret.</li>
+<li>Members&#39; personal information.</li>
+<li>Availability during the voting window.</li>
+</ol>
+<h2 id="adversaries">Adversaries</h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table"><table>
+<thead>
+<tr>
+<th>Adversary</th>
+<th>Capabilities</th>
+</tr>
+</thead>
+<tbody><tr><th scope="row">Member</th>
+<td>Own account, browser, can try to vote twice or as someone else</td>
+</tr>
+<tr><th scope="row">Account thief</th>
+<td>Controls a member&#39;s email inbox</td>
+</tr>
+<tr><th scope="row">Org admin</th>
+<td>Elevated role in the app, no server access</td>
+</tr>
+<tr><th scope="row">Server operator</th>
+<td>Root on the VPS (often the same volunteer as the admin)</td>
+</tr>
+<tr><th scope="row">External attacker</th>
+<td>Internet access, no credentials</td>
+</tr>
+</tbody></table>
+</div>
+<h2 id="guarantees-we-aim-to-provide">Guarantees we aim to provide</h2>
+<ul>
+<li><strong>One member, one vote</strong>: enforced by a single-use voting credential issued at participation time.</li>
+<li><strong>Secrecy from admins</strong>: for secret ballots, no admin role can link a member to a ballot through the application or its exports.</li>
+<li><strong>Verifiable tally</strong>: each voter receives a receipt code, the published ballot list is checkable against the final count, and ballots are entries of an append-only Merkle ledger (<code>packages/ledger</code>, <a href="adr/0005-verification-formats.html">ADR 0005</a>), so that a changed, dropped or reordered ballot is detectable by anyone who holds an earlier checkpoint.</li>
+<li><strong>Tamper-evident audit log</strong> of administrative actions, including role changes and ballot configuration.</li>
+</ul>
+<h2 id="limits-we-state-openly">Limits we state openly</h2>
+<ul>
+<li><strong>The ledger proves consistency, not truth.</strong> It shows that nothing recorded was changed afterwards, and that a voter&#39;s ballot is in the published list. It does not show that the ballot was encrypted honestly or that the tally is right (that is the role of the tally scheme, still to be chosen) and it only holds an operator to account for checkpoints that someone outside the server keeps. An operator who never published a checkpoint can still present a fresh ledger.</li>
+<li><strong>A malicious server operator with root access can defeat secrecy and integrity.</strong> Self-hosting moves trust from a vendor to your own operator. Mitigations: hash-chained ballots, published receipts, and an optional end-to-end verifiable mode (tracked in issues). Organizations with high-stakes elections should use an independent scrutineer.</li>
+<li><strong>Coercion and vote selling</strong> are not preventable in remote voting. Qohesion is meant for consultative and ordinary governance votes, not for contexts with a strong coercion risk. If your by-laws require in-person secret ballots for certain decisions, use them.</li>
+<li><strong>Email as identity</strong> is only as strong as the member&#39;s mailbox. Optional second factor and in-person credential handover are planned.</li>
+<li><strong>Metadata</strong> such as IP addresses is not stored with ballots, and server logs rotate on a short schedule. A network observer can still see that a client connected.</li>
+</ul>
+<h2 id="hosted-edition">Hosted edition</h2>
+<p>If the project operates a hosted service, the project operator becomes the &quot;server operator&quot; adversary for every organization on it. The design answer is in <a href="adr/0002-editions-hosting-and-trust.html">ADR 0002</a>: make integrity independent of the host (encrypted ballots, trustee-held keys, public ledger, independent verifier, anchored checkpoints), and say plainly what remains:</p>
+<ul>
+<li><strong>Secrecy depends on the voter&#39;s browser.</strong> A hosted site serves the code that encrypts the ballot. A malicious host could serve a bad version. Signed, pinned bundles and challenge-audit reduce this but do not remove it.</li>
+<li><strong>Availability depends on the host.</strong> A host can refuse service. Export and self-hosting are the exit.</li>
+<li><strong>Metadata</strong> such as connection times is visible to the host and to its CDN.</li>
+<li>Organizations with high-stakes or contested elections should self-host or add an independent scrutineer.</li>
+</ul>
+<h2 id="out-of-scope">Out of scope</h2>
+<p>Compromised voter devices, nation-state adversaries, and legally binding public elections.</p>
+
+</main>
+<footer class="foot">
+<span>Built from ea13917, 2026-11-26 18:35 UTC</span>
+<a href="https://github.com/msolav/qohesion/blob/main/docs/threat-model.md">Source of this page</a>
+<a href="https://github.com/msolav/qohesion">Source code</a>
+</footer>
+</body>
+</html>

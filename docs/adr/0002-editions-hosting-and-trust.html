@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADR 0002: Editions, hosting and the trust model · Qohesion documents</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#E9E9E3">
+<link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../docs.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+<a href="../index.html"><img src="../assets/mark.svg" alt="" width="24" height="24"><span>Documents</span></a>
+<a href="../../">Development preview</a>
+</header>
+<p class="draft">Working drafts for review. The content can change before release.</p>
+<main id="main" class="sheet">
+<h1 id="adr-0002-editions-hosting-and-the-trust-model">ADR 0002: Editions, hosting and the trust model</h1>
+<ul>
+<li>Status: accepted on 2026-11-26. Accepted to build on, to be revised as the build teaches us.</li>
+<li>Date: 2026-11-25</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>Qohesion is meant to be installed by any organization on its own server. Many organizations cannot run a server, so a project-operated hosted service is also wanted, in the spirit of WordPress: free software that anyone can run or host, plus an official hosted service that pays for the project, and the option to leave and host it yourself.</p>
+<p>A hosted service puts the project operator in the position the threat model warns about: someone with root access to the machine that holds the votes. The hard requirement is that the result of a vote cannot be silently altered, by anyone, including us.</p>
+<h2 id="decision">Decision</h2>
+<h3 id="one-codebase-two-ways-to-run-it">One codebase, two ways to run it</h3>
+<ol>
+<li><strong>Self-hosted.</strong> Free, any server, the organization controls where the data lives.</li>
+<li><strong>Project-hosted.</strong> Operated by the project, free within published limits, then a small fee that covers hosting and support. It runs the same released image as everyone else.</li>
+</ol>
+<p>There is no open-core split and no feature behind a paywall. The licence stays AGPL-3.0. A fee buys hosting and support, never features. Any organization can export everything from the hosted service and import it into its own server, and the reverse.</p>
+<h3 id="integrity-must-not-depend-on-trusting-the-host">Integrity must not depend on trusting the host</h3>
+<p>Hosted or not, the design goal is that a malicious or compromised operator cannot change a result without being caught. The target claim is <strong>tamper-evident and publicly verifiable</strong>, not &quot;incorruptible&quot;: no voting system can honestly promise the second.</p>
+<p>Proposed mechanisms, each tracked as an issue:</p>
+<ol>
+<li><strong>End-to-end verifiable tally.</strong> Ballots are encrypted in the voter&#39;s browser. The decryption key is split among the organization&#39;s trustees (threshold scheme), so the host never holds it. The tally is computed with published proofs. Evaluate existing, audited designs before writing any cryptography: Belenios, Helios, ElectionGuard. Do not invent a scheme.</li>
+<li><strong>Public bulletin board with receipts.</strong> Every encrypted ballot is appended to a hash-chained public ledger, and the voter keeps a receipt that lets them check their ballot is included.</li>
+<li><strong>Independent verifier.</strong> A small standalone open-source tool that re-checks an election transcript without trusting our server or our code.</li>
+<li><strong>Anchored checkpoints.</strong> Ledger hashes are timestamped by an outside party (RFC 3161 or OpenTimestamps) and sent to the organization&#39;s officers, so history cannot be silently rewritten.</li>
+<li><strong>Software supply chain.</strong> Reproducible builds, signed releases, a software bill of materials, pinned dependencies, two-person review on integrity-critical code, an independent audit before 1.0.</li>
+<li><strong>Client-code integrity.</strong> A hosted site serves the code that encrypts your ballot, so a malicious host could serve a bad version. Mitigations: a signed, pinned, versioned bundle with published hashes, a way for voters to challenge-audit their ballot, and a clear statement that organizations with high-stakes elections should self-host or use an independent scrutineer.</li>
+<li><strong>Operator limits.</strong> Hosted operators have no technical means to read ballots or hold decryption keys. Every operator action on production is logged to the public ledger, with a two-person rule for access.</li>
+</ol>
+<h3 id="hosting-platform">Hosting platform</h3>
+<p>Keep ADR 0001&#39;s stack (Node and PostgreSQL in Docker). It runs on any VPS. Cloudflare in front for DNS, CDN, WAF and bot protection is fine. Moving the application onto Workers and D1 would fork the runtime and split the code; defer that unless limits force it. The migration path, export and import between hosted and self-hosted, is what makes starting small safe.</p>
+<h3 id="who-operates-it-and-money">Who operates it, and money</h3>
+<p>Following the WordPress model, the project&#39;s author, or a business they control, operates the official hosted service as a commercial offering: a free tier within published limits, then paid plans that cover hosting and support and fund the project. There is no non-profit entity. The code stays AGPL-3.0, and anyone may run their own hosted service, as with WordPress hosts. The official service is one operator among possible others.</p>
+<p>Because integrity is verifiable independent of the host (above), an organization can trust the official service or a third-party host equally, and loses nothing by leaving either.</p>
+<p>To settle before the hosted service holds other organizations&#39; data:</p>
+<ul>
+<li><strong>Legal form of the operator.</strong> Either the author&#39;s company or the author as a self-employed individual (decision pending). The terms of use name the contracting party, so this must be settled before launch. An individual is personally liable, without limit, for what the service does with other people&#39;s data; a company limits liability to the company, except for personal fault or personal guarantees. Liability insurance should be weighed either way. <strong>[verify]</strong></li>
+<li><strong>Trademark.</strong> Registration is expensive and early. For now the name and logo are &quot;all rights reserved&quot; with a short plain-language notice (see LICENSING.md), and registration is revisited if the project gains traction. Unregistered rights can arise through use. <strong>[verify]</strong></li>
+<li><strong>Terms of use.</strong> A short, plain-language summary with the full text beneath, in French and English (<code>docs/terms-of-use.md</code>), reviewed by a lawyer before any real data is held. Quebec adhesion contracts have language rules (French first). <strong>[verify]</strong></li>
+<li><strong>A public line between the open-source project and the commercial service.</strong> Decisions about the code are made in the open, in the repository. WordPress&#39;s history shows the cost of leaving that line unclear.</li>
+</ul>
+<h2 id="privacy-and-legal-consequences-of-hosting">Privacy and legal consequences of hosting</h2>
+<p>Running the hosted edition makes the operator a <strong>service provider</strong> for each organization, which stays the controller.</p>
+<ul>
+<li>A written agreement between the operator and each organization is needed (Law 25 rules on mandates to service providers; GDPR Art. 28 processor terms). <strong>[verify]</strong></li>
+<li>Data leaving Quebec requires an assessment before transfer (Law 25 s. 17), and the hosting region must be chosen and disclosed. Cloudflare and any host become sub-processors. <strong>[verify]</strong></li>
+<li>Incident handling, retention and erasure duties in <code>docs/privacy.md</code> apply to the operator as processor.</li>
+<li>Whether an electronic vote is valid for a given decision depends on the organization&#39;s by-laws and governing statute, not on where it is hosted.</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>Verifiable tallying is a core requirement, not a later hardening step. It shapes the data model, so it must be decided before the ballot engine is built.</li>
+<li>It costs complexity: key ceremonies for trustees, proofs, a verifier. Simpler ballot types may ship first with an honest statement of what is and is not verifiable.</li>
+<li>The hosted edition should not launch before the operator&#39;s legal form, the processor agreement and the integrity layer are settled. A pilot with a few friendly organizations, with limits, comes first.</li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<p>Which verifiable scheme fits secret ballots, ranked choice and multi-seat elections together. Whether trustees can be non-technical volunteers. The free-tier limits and the point at which an organization is asked to pay or migrate. The legal form of the operator, and the trademark policy for third-party hosts.</p>
+
+</main>
+<footer class="foot">
+<span>Built from ea13917, 2026-11-26 18:35 UTC</span>
+<a href="https://github.com/msolav/qohesion/blob/main/docs/adr/0002-editions-hosting-and-trust.md">Source of this page</a>
+<a href="https://github.com/msolav/qohesion">Source code</a>
+</footer>
+</body>
+</html>

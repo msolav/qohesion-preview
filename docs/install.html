@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install with Docker Compose · Qohesion documents</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#E9E9E3">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+<a href="index.html"><img src="assets/mark.svg" alt="" width="24" height="24"><span>Documents</span></a>
+<a href="../">Development preview</a>
+</header>
+<p class="draft">Working drafts for review. The content can change before release.</p>
+<main id="main" class="sheet">
+<h1 id="install-with-docker-compose">Install with Docker Compose</h1>
+<p>Status: alpha. This build contains the ballot screen preview and the version information. It records no ballot, stores no data and sends no email, so there is nothing to back up yet. The instructions below describe how the application is run, and will grow with it (database, HTTPS proxy, email settings).</p>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li>A server with Docker Engine 24 or later and the Compose plugin.</li>
+<li>A public address for the installation (for example <code>https://vote.example.org</code>) that reaches the server through an HTTPS reverse proxy. The application itself speaks HTTP on port 3000 and listens on <code>127.0.0.1</code> only.</li>
+</ul>
+<h2 id="steps">Steps</h2>
+<ol>
+<li><p>Download the source at the version to install (a Git tag such as <code>v0.1.0</code>), or clone the repository and check out the tag.</p>
+</li>
+<li><p>Build and start the application, giving its public address:</p>
+<pre><code class="language-sh">ORIGIN=https://vote.example.org QOHESION_COMMIT=$(git rev-parse HEAD) docker compose up -d --build
+</code></pre>
+<p><code>ORIGIN</code> is required. Form submissions are refused without it, because the application checks that they come from its own address.</p>
+</li>
+<li><p>Point the HTTPS reverse proxy at <code>127.0.0.1:3000</code>.</p>
+</li>
+<li><p>Check the installation: <code>https://vote.example.org/version</code> returns the version, release channel, commit and build date as JSON.</p>
+</li>
+</ol>
+<h2 id="choosing-and-changing-the-version">Choosing and changing the version</h2>
+<p>The image is tagged with the exact version (<code>qohesion:0.1.0</code>). There is no <code>latest</code> tag during alpha, so that an installation never moves to a new version without a decision. To change the version, check out the new tag and run step 2 again. The documented update command, with backup, ordered migrations and restore on failure, is planned (see <a href="adr/0004-versioning-and-updates.html">ADR 0004</a>). Until it exists, no data needs migrating.</p>
+<h2 id="what-the-container-does">What the container does</h2>
+<ul>
+<li>Runs as the unprivileged user <code>node</code>, with a read-only file system, no Linux capabilities and <code>no-new-privileges</code>.</li>
+<li>Makes no network call other than answering requests: no external fonts, scripts or telemetry.</li>
+<li>Reports its health at <code>/version</code>; Docker marks it unhealthy after three failed checks.</li>
+</ul>
+<h2 id="licence-note">Licence note</h2>
+<p>The application is licensed under the AGPL-3.0-or-later. A modified version that is offered to users over a network must offer those users its source code. The footer of each page links to the source for this reason. If the code is changed, set <code>QOHESION_SOURCE_URL</code> to the address (https) where the changed source is published; the link then points there. Without it, the link points to the upstream repository.</p>
+
+</main>
+<footer class="foot">
+<span>Built from ea13917, 2026-11-26 18:35 UTC</span>
+<a href="https://github.com/msolav/qohesion/blob/main/docs/install.md">Source of this page</a>
+<a href="https://github.com/msolav/qohesion">Source code</a>
+</footer>
+</body>
+</html>

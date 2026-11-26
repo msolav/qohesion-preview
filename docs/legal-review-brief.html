@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Legal review brief · Qohesion documents</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#E9E9E3">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+<a href="index.html"><img src="assets/mark.svg" alt="" width="24" height="24"><span>Documents</span></a>
+<a href="../">Development preview</a>
+</header>
+<p class="draft">Working drafts for review. The content can change before release.</p>
+<main id="main" class="sheet">
+<h1 id="legal-review-brief">Legal review brief</h1>
+<p>Status: draft, to be sent to counsel in Quebec once the questions below are agreed. This brief is not legal advice and does not state what the law requires. Every point is a question, and each answer is expected from counsel.</p>
+<p>Résumé : liste des questions à soumettre à un conseiller juridique du Québec avant l’ouverture du service hébergé. Les sections sont classées par ordre de priorité. Ce document ne contient aucun avis juridique.</p>
+<h2 id="what-qohesion-is">What Qohesion is</h2>
+<p>Qohesion is open-source software (AGPL-3.0-or-later) for holding votes and polls in groups such as associations, cooperatives and unions, in French and English. It runs in three modes on one code base (Light, Full web, Self-hosted, see <a href="adr/0003-three-modes-one-engine.html">ADR 0003</a>). The project also plans an official hosted service, run by an operator who has not yet been named, free within limits and paid beyond them (<a href="adr/0006-pricing-and-limits.html">ADR 0006</a>, proposed). Nothing is hosted for the public yet, no vote can be recorded, and no personal data is held.</p>
+<h2 id="what-exists-to-read">What exists to read</h2>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table"><table>
+<thead>
+<tr>
+<th>Document</th>
+<th>What it contains</th>
+</tr>
+</thead>
+<tbody><tr><th scope="row"><a href="terms-of-use.html">terms-of-use.md</a></th>
+<td>Draft bilingual terms of the hosted service, with placeholders for the operator</td>
+</tr>
+<tr><th scope="row"><a href="privacy.html">privacy.md</a></th>
+<td>Approach to Law 25 and the GDPR, roles, and the erasure problem</td>
+</tr>
+<tr><th scope="row"><a href="templates/README.html">templates/</a></th>
+<td>Fill-in privacy policy and impact assessment for installing organizations</td>
+</tr>
+<tr><th scope="row"><a href="threat-model.html">threat-model.md</a></th>
+<td>What the software protects against and what depends on trusting an administrator</td>
+</tr>
+<tr><th scope="row"><a href="adr/0002-editions-hosting-and-trust.html">adr/0002</a>, <a href="adr/0003-three-modes-one-engine.html">0003</a></th>
+<td>Editions, trust model, registration roll, email safeguards, cross-organization checks</td>
+</tr>
+<tr><th scope="row"><a href="trademark-policy.html">trademark-policy.md</a></th>
+<td>Draft name and logo policy</td>
+</tr>
+<tr><th scope="row"><a href="https://github.com/msolav/qohesion/blob/main/LICENSING.md">LICENSING.md</a></th>
+<td>Which licence covers what, and why</td>
+</tr>
+</tbody></table>
+</div>
+<h2 id="questions-in-order-of-priority">Questions, in order of priority</h2>
+<h3 id="a-before-the-hosted-service-opens-to-the-public">A. Before the hosted service opens to the public</h3>
+<ol>
+<li><p><strong>Operator and liability.</strong> Which entity should contract with customers and hold the data-protection duties: an existing incorporated company, a new company, or an individual? What does each exposure look like for a service that holds member lists and records votes? What insurance (cyber, errors and omissions) is usual?</p>
+<p>The operator is expected to be an existing registered business that is not incorporated. Incorporation and insurance are deferred until the service has paying customers, and until then costs are kept minimal. Counsel is asked what exposure that leaves in the meantime, and at what point (for example holding real member lists, or the first payment) the arrangement should change.</p>
+</li>
+<li><p><strong>Terms of use.</strong> Are the terms enforceable as drafted? In particular the limit of liability (section 11), the governing law and forum (section 12), the language clause (section 13) and the notice of changes (section 14). Which rules of the <em>Charter of the French language</em> apply to a contract of this kind offered to organizations? Are any customers likely to count as consumers?</p>
+</li>
+<li><p><strong>Personal information.</strong> In the hosted service, which party is the person responsible for the information and which acts for it? What must the operator itself do under Law 25 (a person in charge, an incident register, impact assessments, rules on hosting or processing outside Quebec)? Review of the privacy policy and impact-assessment templates.</p>
+</li>
+<li><p><strong>Electronic messages.</strong> The service sends a verification email to an address that an organizer entered, at the request of the person who then confirms it (<a href="adr/0003-three-modes-one-engine.html">ADR 0003</a> sections 5 to 7). Does Canada&#39;s anti-spam law treat these messages as commercial? What consent, identification and unsubscribe rules apply? Is the organizer attestation described in section 6 sufficient, and what should it say?</p>
+</li>
+<li><p><strong>Cross-organization fingerprints.</strong> ADR 0003 section 8 compares member addresses across organizations only as keyed fingerprints, to limit abuse of the free allowance. Is a keyed fingerprint personal information? What notice, retention period and impact assessment does this need, and is the purpose proportionate?</p>
+</li>
+</ol>
+<h3 id="b-before-anyone-is-charged">B. Before anyone is charged</h3>
+<ol start="6">
+<li><strong>Terms of sale.</strong> Refunds, the event pass, and the payment processor&#39;s terms, as proposed in ADR 0006. If an annual plan is added later, which consumer-law rules on renewal apply?</li>
+<li><strong>Taxes.</strong> Registration thresholds and treatment of GST and QST. This may be a question for an accountant instead.</li>
+<li><strong>Trademark.</strong> Review of the <a href="trademark-policy.html">draft policy</a>; who should own the marks (the operator or an individual); when and where to register; and how to handle a look-alike service.</li>
+</ol>
+<h3 id="c-about-what-the-software-says-and-holds">C. About what the software says and holds</h3>
+<ol start="9">
+<li><strong>Validity of electronic votes.</strong> The terms say that validity depends on each organization&#39;s by-laws and governing statute. Is that wording enough? What may the website and the interface say about legal validity without creating a promise?</li>
+<li><strong>Erasure and a verifiable vote.</strong> <a href="privacy.html">privacy.md</a> separates who voted from what was voted so that erasure does not break the count. Does that approach hold for secret ballots, and for open ballots recorded in minutes (the points marked to verify)?</li>
+<li><strong>Licence and contributions.</strong> Contributions are accepted under the Developer Certificate of Origin and keep their authors&#39; copyright. Is that sufficient for a project that later sells a hosted service, or is a different arrangement needed? Is the footer source link enough to satisfy section 13 of the AGPL for the hosted service?</li>
+<li><strong>Vulnerability reports.</strong> Review of <a href="https://github.com/msolav/qohesion/blob/main/SECURITY.md">SECURITY.md</a> and the liability that comes with a public disclosure policy.</li>
+</ol>
+<h2 id="not-for-counsel">Not for counsel</h2>
+<p>The choice of the encryption and counting scheme for ballots is a technical decision, recorded in <a href="adr/0002-editions-hosting-and-trust.html">ADR 0002</a>. No customer data exists, so none will be sent.</p>
+<h2 id="what-to-ask-counsel-for">What to ask counsel for</h2>
+<p>A fixed fee for group A first, with a written list of changes to the terms and the privacy documents. Groups B and C can follow once the operator and the prices are settled.</p>
+
+</main>
+<footer class="foot">
+<span>Built from ea13917, 2026-11-26 18:35 UTC</span>
+<a href="https://github.com/msolav/qohesion/blob/main/docs/legal-review-brief.md">Source of this page</a>
+<a href="https://github.com/msolav/qohesion">Source code</a>
+</footer>
+</body>
+</html>

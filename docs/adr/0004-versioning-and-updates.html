@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADR 0004: Versioning and updates · Qohesion documents</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#E9E9E3">
+<link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../docs.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+<a href="../index.html"><img src="../assets/mark.svg" alt="" width="24" height="24"><span>Documents</span></a>
+<a href="../../">Development preview</a>
+</header>
+<p class="draft">Working drafts for review. The content can change before release.</p>
+<main id="main" class="sheet">
+<h1 id="adr-0004-versioning-and-updates">ADR 0004: Versioning and updates</h1>
+<ul>
+<li>Status: accepted on 2026-11-26. Accepted to build on, to be revised as the build teaches us.</li>
+<li>Date: 2026-11-25</li>
+<li>Extends: <a href="0003-three-modes-one-engine.html">ADR 0003</a></li>
+</ul>
+<h2 id="context">Context</h2>
+<p>The software is in alpha. Hosted installations, preview builds and self-hosted installations all need to state which version they run, and self-hosted administrators need to move to a chosen version without losing data. Votes and their verification data must stay checkable across versions.</p>
+<h2 id="decision">Decision</h2>
+<h3 id="1-scheme">1. Scheme</h3>
+<p><a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning 2.0.0</a>: <code>MAJOR.MINOR.PATCH</code>, with an optional prerelease tag (<code>0.2.0-alpha.1</code>). Numbers have no leading zeros (<code>0.1.0</code>, <code>0.12.3</code>).</p>
+<ul>
+<li><strong>Major 0 means alpha.</strong> Any minor version may change behaviour, configuration or stored data. Patch versions fix defects and do not change data formats.</li>
+<li><strong>1.0.0</strong> is declared when the verifiable tally, the update procedure and the data formats are stable. After 1.0.0, minor versions are backward compatible and breaking changes need a new major version.</li>
+<li>Displayed form: <code>v0.1.0 (alpha)</code>.</li>
+</ul>
+<h3 id="2-one-source-of-truth">2. One source of truth</h3>
+<ul>
+<li>The <code>VERSION</code> file at the repository root declares the version once. Each package&#39;s <code>package.json</code> repeats it, and a script (<code>scripts/check-version.mjs</code>) fails the build when they differ or when the version is invalid.</li>
+<li>A release is a Git tag <code>vMAJOR.MINOR.PATCH</code> on the main branch, with a GitHub Release whose text is the matching section of <code>CHANGELOG.md</code>.</li>
+<li><code>CHANGELOG.md</code> follows Keep a Changelog. Each entry lists added, changed, fixed and removed items, and an &quot;Upgrade notes&quot; section for anything an administrator must do or any data change.</li>
+</ul>
+<h3 id="3-visibility">3. Visibility</h3>
+<ul>
+<li>Every interface shows the version in its footer (<code>v0.1.0 (alpha)</code>), with the short build identifier in the hosted and preview builds.</li>
+<li>A <code>/version</code> endpoint returns the version, channel, commit and build date as JSON.</li>
+<li>A changelog page renders <code>CHANGELOG.md</code>. Entries are in English first; French follows when the translation tools exist.</li>
+</ul>
+<h3 id="4-updates-for-self-hosted-installations">4. Updates for self-hosted installations</h3>
+<ul>
+<li>Container images are published with the exact version as tag (for example <code>ghcr.io/msolav/qohesion:0.1.0</code>) and an <code>edge</code> tag for the main branch. There is no <code>latest</code> tag during alpha, so that no installation moves to a new version without a decision. The image name is proposed and depends on the publishing setup.</li>
+<li>The administrator pins a version in the configuration file and changes it to update.</li>
+<li>An update command (<code>qohesion update --to 0.2.0</code>) does the following:<ol>
+<li>assesses the move (the engine&#39;s <code>assessUpdate</code>): direction, skipped minor versions, compatibility warnings;</li>
+<li>refuses a downgrade;</li>
+<li>takes a backup of the database and configuration;</li>
+<li>applies the database migrations in order, each in a transaction, forward only;</li>
+<li>checks that the application starts and reports the new version;</li>
+<li>on failure, restores the backup and keeps the previous version.</li>
+</ol>
+</li>
+<li>The way back after a completed update is to restore the backup taken before it and start the previous version. Migrations are not reversed.</li>
+<li>Support policy during alpha: only the latest minor version receives fixes. Skipping minor versions is allowed but warned about, and the update command applies every migration in between.</li>
+<li>Security fixes are released as patch versions with a published advisory.</li>
+</ul>
+<h3 id="5-data-formats-are-versioned-separately">5. Data formats are versioned separately</h3>
+<p>Exported data, ballot records and verification transcripts carry their own <code>formatVersion</code>, independent of the application version. The independent verifier supports every past format, so that an old election can be checked with a new tool. A format change is listed in the changelog&#39;s upgrade notes.</p>
+<h3 id="6-update-notices">6. Update notices</h3>
+<p>The application makes no network call to check for updates by default (see <a href="0001-stack-and-deployment.html">ADR 0001</a>: no external calls other than email). An administrator can enable a check against the project&#39;s release feed in the settings, or subscribe to the feed (<code>releases.atom</code>) outside the application.</p>
+<h3 id="7-hosted-service-and-preview">7. Hosted service and preview</h3>
+<p>Each change reaches the development preview first, then production. The footer of each shows the version and build. Hosted updates keep the same migration rules; a failed migration stops the rollout.</p>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>The update command and migrations are part of the first self-hosted release, not an afterthought.</li>
+<li>Treating data formats as versioned from the start costs little now and avoids unreadable archives later.</li>
+<li>Refusing downgrades is safer for data but means a bad release is answered by a restore, so backups must be tested.</li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<p>Whether to publish a <code>0.x</code> floating tag that follows patch releases. The retention period for old image tags. Whether the hosted service shows the changelog to organization owners at each update.</p>
+
+</main>
+<footer class="foot">
+<span>Built from ea13917, 2026-11-26 18:35 UTC</span>
+<a href="https://github.com/msolav/qohesion/blob/main/docs/adr/0004-versioning-and-updates.md">Source of this page</a>
+<a href="https://github.com/msolav/qohesion">Source code</a>
+</footer>
+</body>
+</html>

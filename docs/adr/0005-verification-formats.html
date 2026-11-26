@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADR 0005: Verification formats, version 1 · Qohesion documents</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#E9E9E3">
+<link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../docs.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+<a href="../index.html"><img src="../assets/mark.svg" alt="" width="24" height="24"><span>Documents</span></a>
+<a href="../../">Development preview</a>
+</header>
+<p class="draft">Working drafts for review. The content can change before release.</p>
+<main id="main" class="sheet">
+<h1 id="adr-0005-verification-formats-version-1">ADR 0005: Verification formats, version 1</h1>
+<ul>
+<li>Status: accepted on 2026-11-26 for the alpha. The formats are named &quot;version 1&quot;. Because nothing is stored yet, they can still change before the first release without a migration; after it, a change makes a version 2 (see ADR 0004).</li>
+<li>Date: 2026-11-26</li>
+<li>Extends: <a href="0003-three-modes-one-engine.html">ADR 0003</a> (roll and registration), <a href="0004-versioning-and-updates.html">ADR 0004</a> (data formats are versioned separately)</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>Several short codes and hashes are shown to people and compared later: the code of the frozen roll, the receipt of a ballot, the checkpoint of the ledger. An independent verifier must be able to recompute them years later, so their exact construction is part of the data format and must not change silently. This record fixes version 1 of those constructions as implemented in <code>packages/roll</code> and <code>packages/ledger</code>.</p>
+<h2 id="decision">Decision</h2>
+<h3 id="1-address-fingerprint">1. Address fingerprint</h3>
+<p><code>HMAC-SHA-256(key, canonical address)</code>, written as base64url, first 32 characters. The canonical address is lower-case, with <code>+tag</code> removed for providers that ignore it, dots removed for Gmail, and known provider aliases merged (<code>googlemail.com</code> to <code>gmail.com</code>, <code>protonmail.com</code> and <code>pm.me</code> to <code>proton.me</code>). Other domains are left unchanged. The key is at least 16 bytes and is held by the service, never published. Fingerprints are compared across organizations only to detect overlapping lists (ADR 0003, section 8). Within one poll, the roll code is computed over fingerprints made with a key specific to that poll, so that a published roll code cannot be matched against other polls. <em>The per-poll key is not yet implemented.</em></p>
+<h3 id="2-roll-code">2. Roll code</h3>
+<p>SHA-256 over <code>qohesion-roll-v1\n</code> followed by each fingerprint, sorted and without duplicates, each followed by <code>\n</code>. The first 60 bits are written in Crockford base32 as <code>XXXX-XXXX-XXXX</code>. The order of the list does not matter, and any change to the list changes the code. A fingerprint must be non-empty base64url text. Golden values are pinned in the tests (the empty roll gives <code>CKWY-NFZW-ZN0Y</code>).</p>
+<h3 id="3-ledger">3. Ledger</h3>
+<p>The Merkle tree of <a href="https://www.rfc-editor.org/rfc/rfc9162.html">RFC 9162</a>, section 2, with SHA-256: empty tree <code>SHA-256(&quot;&quot;)</code>, leaf <code>SHA-256(0x00 || entry)</code>, node <code>SHA-256(0x01 || left || right)</code>. The entry is the encrypted ballot as stored. The tree supports inclusion proofs (a ballot is counted) and consistency proofs (a later ledger extends an earlier one unchanged).</p>
+<h3 id="4-receipt-code">4. Receipt code</h3>
+<p>The first 60 bits of the entry&#39;s leaf hash in Crockford base32, <code>XXXX-XXXX-XXXX</code>. The code locates the entry in the published list. The full leaf hash with an inclusion proof is what verifies. With 60 bits, the chance that two entries in a poll of 10,000 ballots share a code is about one in 23 billion; a collision is resolved by the full hash.</p>
+<h3 id="5-checkpoint">5. Checkpoint</h3>
+<p>Text, one field per line, ending with a line feed: <code>qohesion-checkpoint-v1</code>, the poll identifier, the size, the root in lower-case hexadecimal. The value that is timestamped or signed is the SHA-256 of that text. The size and the root are bound together by the checkpoint, not by any proof: inclusion and consistency proofs do not authenticate the size.</p>
+<h3 id="6-versions">6. Versions</h3>
+<p>Each construction carries its version in its input (<code>qohesion-roll-v1</code>, <code>qohesion-checkpoint-v1</code>). A change creates a new version identifier. The verifier supports every past version (ADR 0004, section 5).</p>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>A verifier can be written in any language from this record and the RFC, and checked against the pinned values.</li>
+<li>The ledger and the tally scheme are independent: the ledger stores whatever the encryption scheme produces. The encryption and tally scheme remains to be chosen among audited designs (ADR 0002).</li>
+<li>The receipt code is short for people. It is a lookup key, never a proof by itself.</li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<p>The per-poll fingerprint key and where it is kept. Whether to sign checkpoints with the administrators&#39; keys in addition to timestamping them (OpenTimestamps or RFC 3161). The encoding of entries when the tally scheme is chosen. A browser implementation of the hash function for voters who verify in the browser.</p>
+
+</main>
+<footer class="foot">
+<span>Built from ea13917, 2026-11-26 18:35 UTC</span>
+<a href="https://github.com/msolav/qohesion/blob/main/docs/adr/0005-verification-formats.md">Source of this page</a>
+<a href="https://github.com/msolav/qohesion">Source code</a>
+</footer>
+</body>
+</html>

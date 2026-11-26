@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADR 0006: Pricing and limits for the hosted service · Qohesion documents</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#E9E9E3">
+<link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../docs.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+<a href="../index.html"><img src="../assets/mark.svg" alt="" width="24" height="24"><span>Documents</span></a>
+<a href="../../">Development preview</a>
+</header>
+<p class="draft">Working drafts for review. The content can change before release.</p>
+<main id="main" class="sheet wide">
+<h1 id="adr-0006-pricing-and-limits-for-the-hosted-service">ADR 0006: Pricing and limits for the hosted service</h1>
+<ul>
+<li>Status: proposed</li>
+<li>Date: 2026-11-26</li>
+<li>Extends: <a href="0002-editions-hosting-and-trust.html">ADR 0002</a> (editions and hosting), <a href="0003-three-modes-one-engine.html">ADR 0003</a> (free allowance, section 7)</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>The hosted service pays for the project (ADR 0002). Two rules already bind the price: paying never unlocks features, and plans differ only by limits, hosting and support (<a href="https://github.com/msolav/qohesion/blob/main/LICENSING.md">LICENSING.md</a>, <a href="../terms-of-use.html">terms of use</a> section 8). Free capacity is bounded by the sending providers&#39; free plans (ADR 0003 sections 7 and 9).</p>
+<p>Member-run organizations vote a few times a year, often at one annual meeting. A monthly subscription fits that pattern badly, and a card on file that renews unnoticed is a source of complaints.</p>
+<h3 id="evidence-checked-on-2026-11-26">Evidence, checked on 2026-11-26</h3>
+<p>Sending costs, from each provider&#39;s own pages. Brevo&#39;s figures come from its pricing page and plan notes as captured on 2026-11-26 (the copy is kept outside the repository, because it belongs to Brevo). Prices change, so they are checked again before any decision.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table"><table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Free</th>
+<th>Paid</th>
+</tr>
+</thead>
+<tbody><tr><th scope="row">Brevo</th>
+<td>300 emails a day (about 9,000 a month)</td>
+<td>Starter CA$20 a month from 5,000 emails (CA$14 on yearly billing with the 30% coupon shown); Standard CA$42 (CA$29.43)</td>
+</tr>
+<tr><th scope="row">Resend</th>
+<td>3,000 a month, 100 a day</td>
+<td>Pro US$20 a month for 50,000 emails</td>
+</tr>
+<tr><th scope="row">Amazon SES</th>
+<td>none</td>
+<td>US$0.10 per 1,000 emails, no monthly minimum</td>
+</tr>
+</tbody></table>
+</div>
+<p>Transactional email sent through Brevo&#39;s API or SMTP is included in every plan and counts toward the plan&#39;s volume. The free plan&#39;s 9,000 a month is more than the 5,000 that Starter starts at, so the first paid plan is needed for the daily cap and not for volume. Brevo&#39;s API page states that paid plans have no daily limit (to confirm before relying on it).</p>
+<p>A 300-member vote sends 300 to 600 emails: about US$0.03 to US$0.06 at the SES rate. Email is not the cost that matters. The costs that matter are a server, an email plan once the free plans are outgrown, accounting and insurance, payment-processor fees, and above all time for support. The server, insurance and processor figures have not been researched yet.</p>
+<p>What similar services charge, per election. Figures marked (reported) come from third parties, some of them competitors, and have not been confirmed.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table"><table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Price</th>
+</tr>
+</thead>
+<tbody><tr><th scope="row">Election Runner</th>
+<td>free under 20 voters; $19 up to 100; $36 up to 300; a calculator above 300 (currency not stated on the page)</td>
+</tr>
+<tr><th scope="row">Simply Voting</th>
+<td>no published tiers; about $200 for 100 to 300 electors (reported, from its own calculator)</td>
+</tr>
+<tr><th scope="row">Others</th>
+<td>about $10 to $29 for 100 voters; $99 to $299 per election for larger associations (reported)</td>
+</tr>
+</tbody></table>
+</div>
+<p>No comparator was found for 1,000 voters or more.</p>
+<h2 id="decision-proposed">Decision (proposed)</h2>
+<ol>
+<li><p><strong>Two offers at launch: Free and Event pass.</strong> No subscription at launch.</p>
+</li>
+<li><p><strong>Free.</strong> Small polls within the monthly allowance of verification emails (ADR 0003 section 7), with the target of up to 50 participants a poll.</p>
+</li>
+<li><p><strong>Event pass.</strong> One payment per voting event, priced by the size band of the roll. An event is one vote or poll with its roll, open for at most [30 days]. A pass includes the verification email for each participant, the receipts and the export of results.</p>
+</li>
+<li><p><strong>Starting prices, in Canadian dollars before tax.</strong> They are a starting point to adjust after the first customers, not a validated figure.</p>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table"><table>
+<thead>
+<tr>
+<th>Roll size</th>
+<th>Event pass</th>
+</tr>
+</thead>
+<tbody><tr><th scope="row">up to 100</th>
+<td>19</td>
+</tr>
+<tr><th scope="row">up to 300</th>
+<td>39</td>
+</tr>
+<tr><th scope="row">up to 1,000</th>
+<td>99</td>
+</tr>
+<tr><th scope="row">up to 5,000</th>
+<td>249</td>
+</tr>
+<tr><th scope="row">above 5,000</th>
+<td>quoted</td>
+</tr>
+</tbody></table>
+</div>
+<p>The first two bands sit at or just above the cheapest self-service comparator, so the service is neither the lowest price nor an outlier. The two upper bands have no comparator and rest on judgment.</p>
+</li>
+<li><p><strong>Not at launch.</strong> An annual plan (added when organizations ask for it or repeat use shows it is wanted), metering by voter beyond the band, and any form of price by feature (never).</p>
+</li>
+<li><p><strong>Self-hosted</strong> stays free. Installation, support and custom work are quoted, and custom features are published under the AGPL (ADR 0003 section 7).</p>
+</li>
+<li><p><strong>Changes to prices</strong> are announced at least [60 days] ahead (terms of use section 7) and never apply to an event already paid for.</p>
+</li>
+</ol>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>Section 8 of the terms of use can be completed once the prices and the definition of an event are confirmed.</li>
+<li>A payment processor, the tax treatment (GST and QST) and the refund rule must be chosen, and the terms of sale reviewed by counsel before the first payment. Counsel also reviews consumer-law rules if an annual plan is added later.</li>
+<li>With 50 of the 300 daily emails reserved for service emails (ADR 0003 section 9), a vote of more than about 250 members cannot send all its verification emails in one day on the free plan. The first event pass above that size needs a paid sending plan (Brevo Starter at CA$20 a month, or another provider). The 300-member pass price covers it.</li>
+<li>The hosted service does not open before ballots can be encrypted and counted, so no price is published yet.</li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<ul>
+<li>Whether a band is fixed at payment or moves up if late additions exceed it.</li>
+<li>A discount for volunteer-run groups, and what proves eligibility.</li>
+<li>Display of taxes, and whether to show a US-dollar price.</li>
+<li>What is included in a reminder email for paid events (ADR 0003 section 7 leaves reminders to the administrator in the free lane).</li>
+<li>When the annual plan is added.</li>
+<li>The French name of the event pass, to add to the <a href="../glossary.html">glossary</a>.</li>
+</ul>
+
+</main>
+<footer class="foot">
+<span>Built from ea13917, 2026-11-26 18:35 UTC</span>
+<a href="https://github.com/msolav/qohesion/blob/main/docs/adr/0006-pricing-and-limits.md">Source of this page</a>
+<a href="https://github.com/msolav/qohesion">Source code</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADR 0003: Three modes, one engine · Qohesion documents</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#E9E9E3">
+<link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../docs.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+<a href="../index.html"><img src="../assets/mark.svg" alt="" width="24" height="24"><span>Documents</span></a>
+<a href="../../">Development preview</a>
+</header>
+<p class="draft">Working drafts for review. The content can change before release.</p>
+<main id="main" class="sheet">
+<h1 id="adr-0003-three-modes-one-engine">ADR 0003: Three modes, one engine</h1>
+<ul>
+<li>Status: accepted on 2026-11-26. Accepted to build on, to be revised as the build teaches us.</li>
+<li>Date: 2026-11-25</li>
+<li>Extends: <a href="0001-stack-and-deployment.html">ADR 0001</a> (stack), <a href="0002-editions-hosting-and-trust.html">ADR 0002</a> (editions and trust)</li>
+</ul>
+<h2 id="context">Context</h2>
+<p>The project offers voting and polling to groups of different sizes and needs. A single code base must serve a quick vote with no account, a managed web space, and an installation on the group&#39;s own server. Sending email is the main operational risk of any hosted mode, because abuse harms deliverability for every user.</p>
+<h2 id="decision">Decision</h2>
+<h3 id="1-three-modes-on-one-engine">1. Three modes on one engine</h3>
+<div class="table-wrap" tabindex="0" role="region" aria-label="Table"><table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Accounts</th>
+<th>Data kept</th>
+<th>Email</th>
+<th>Typical use</th>
+</tr>
+</thead>
+<tbody><tr><th scope="row"><strong>Light</strong></th>
+<td>None</td>
+<td>Encrypted ballots on the server until a set date after closing, then deleted. The decryption key stays in the administrator&#39;s link and never reaches the server.</td>
+<td>Shared link; on-demand verification email only</td>
+<td>Informal polls and consultations</td>
+</tr>
+<tr><th scope="row"><strong>Full web</strong></th>
+<td>Yes</td>
+<td>Database, encrypted, minimal</td>
+<td>Verified domain of the organization, or the shared lane</td>
+<td>Recurring votes, member management</td>
+</tr>
+<tr><th scope="row"><strong>Self-hosted</strong></th>
+<td>Yes</td>
+<td>On the group&#39;s own server</td>
+<td>The group&#39;s own SMTP service (required)</td>
+<td>Control over data location</td>
+</tr>
+</tbody></table>
+</div>
+<p>One code base. The storage layer is an interface with interchangeable adapters, so ephemeral and persistent storage share the same application code.</p>
+<h3 id="2-settings-use-the-same-question-engine-as-ballots">2. Settings use the same question engine as ballots</h3>
+<p>The setup wizard (template, colours, fonts where the template allows them, organization information, voting rules, languages) is built from the form and question engine that also produces ballots. A setting is a form answer stored as configuration. It is not a ballot and does not use ballot encryption or receipts. Settings that need a preview or a test (email, decision rules) are grouped on a separate advanced page.</p>
+<h3 id="3-roles">3. Roles</h3>
+<ul>
+<li><strong>Owner:</strong> manages the platform account (billing, settings, deletion). Several owners are allowed; two are recommended.</li>
+<li><strong>Administrator:</strong> performs ballot duties (approves the roll, holds a share of the key, sees every roll change).</li>
+<li>The account belongs to the organization, not to a person. Ownership can be transferred (the recipient accepts). Succession by a majority of administrators, and a member-initiated challenge decided by a vote on the platform, are later features. Election results can propose the new administrators.</li>
+</ul>
+<h3 id="4-registration-phase-and-roll">4. Registration phase and roll</h3>
+<ol>
+<li>Administrators enter the addresses. The form checks syntax, suggests corrections for common domain typos, and checks that the domain accepts mail.</li>
+<li>Each member registers by confirming their own address. The administrator never receives the member&#39;s personal link.</li>
+<li>Registration closes. The roll is frozen and published as a count and a short code. At the formal level, the other administrators co-sign it.</li>
+<li>Additions after the freeze are allowed. Each is recorded with time and author, requires a second administrator&#39;s approval at the formal level, and shows as &quot;added late&quot;.</li>
+<li>Registered members see the number registered. Turnout during voting is hidden by default.</li>
+</ol>
+<p>The administrator sees one status per address: listed, requested, confirmed, voted (yes or no, never the choice), withdrawn, bounced. An address that is not on the list but tries to join appears masked in the administrator&#39;s view and can be added in one step.</p>
+<p>An &quot;informal one-step&quot; option combines confirmation and voting for informal polls. It does not freeze the roll before the first ballot.</p>
+<h3 id="5-invitation-delivery">5. Invitation delivery</h3>
+<ul>
+<li><strong>A. Shared link with a pre-registered list.</strong> The organizer shares one link through their own channels. A member enters an address; if it is on the list, one verification email is sent. If not, nothing is sent, and the same neutral message appears either way.</li>
+<li><strong>B. Personal links bound to an address.</strong> Links are distributed by the organizer (CSV mail merge or the organizer&#39;s own provider). A link works only after the assigned mailbox verifies it, so holding the link does not allow voting.</li>
+<li><strong>C. Sending through the organizer&#39;s own provider</strong> (later; requires storing a key).</li>
+</ul>
+<p>In the Light mode, delivery option A is the default, with a ready-made invitation text in each language to copy into any message.</p>
+<h3 id="6-safeguards-against-abuse">6. Safeguards against abuse</h3>
+<p>Accepted limits: a determined administrator can script the member step. The aim is to bound the harm.</p>
+<ul>
+<li>Bounce budget (about 5%) stops sending for that organizer.</li>
+<li>No more than one verification email per address per day; per-recipient-domain hourly limits.</li>
+<li>Anti-robot check on the shared link and on registration.</li>
+<li>Sending quota that grows with the confirmation rate.</li>
+<li>Circuit breaker per organizer account (software counters, not subdomains).</li>
+<li>Complaints and one-click unsubscribe handled automatically. A complaint withdraws the address from that poll and weighs heavily in the organizer&#39;s score, because every message answers a request.</li>
+<li>Organizer attestation, at the moment of sending, that permission exists to contact the listed people, with identity details recorded.</li>
+<li>Safety ladder, depending on cause:<ul>
+<li><strong>Accident</strong> (bounces over budget, normal confirmations): pause the unconfirmed remainder, show the administrator the bad addresses, extend deadlines by the length of the pause.</li>
+<li><strong>Abuse</strong> (complaint spike, near-zero confirmations): suspend the whole poll, notify administrators, review.</li>
+</ul>
+</li>
+<li>A score that fades over time. Resumption after a severe event requires a verified own domain or own SMTP service, or a review.</li>
+<li>Reserved names for organization spaces, to prevent impersonation.</li>
+</ul>
+<h3 id="7-free-allowance">7. Free allowance</h3>
+<ul>
+<li>One verification email per participant in the free lane. Reminders and &quot;voting open&quot; notices are the administrator&#39;s task through the shared link.</li>
+<li>A monthly <strong>allowance of verification emails</strong> per organizer. At registration the organizer chooses the balance: larger groups with fewer polls, or smaller groups with more polls. The product of participants and polls stays within the allowance, up to a maximum number of participants and polls.</li>
+<li>A global daily budget protects the free lane&#39;s cost. When the day&#39;s budget is used, further verification waits for the next day or the organizer upgrades.</li>
+<li>Limits apply to new polls only. A poll in progress is never reduced.</li>
+<li>Above the free limits, plans are priced by number of members. Custom features requested by a customer are quoted for integration and published under the AGPL for everyone.</li>
+</ul>
+<h3 id="8-multiple-accounts-and-overlapping-lists">8. Multiple accounts and overlapping lists</h3>
+<ul>
+<li>The free allowance attaches to the verified organizer address, normalized (plus-addressing and dots removed where the provider ignores them), and to the organization identity details.</li>
+<li>Member addresses are compared across organizations only as keyed fingerprints (HMAC), never in clear text. A high overlap between lists of different accounts flags them as a possible group.</li>
+<li>Flagged accounts share one allowance. The organizer can declare accounts as related (for example a federation and its member groups), which also shares the allowance without penalty. Low overlap is normal and not flagged: a person can belong to several groups.</li>
+<li>Per-address limits apply across all organizations (verification emails per day and per week). An address that appears in many lists at once is rate-limited and flagged.</li>
+<li>Fingerprints and counters are kept for the shortest period that supports these checks. This needs a privacy impact assessment before use.</li>
+</ul>
+<h3 id="9-sending-infrastructure">9. Sending infrastructure</h3>
+<ul>
+<li><strong>Transport interface.</strong> The application sends through an <code>EmailTransport</code> interface with interchangeable adapters (Cloudflare Email Sending, SMTP, Resend, Amazon SES). Self-hosted installations use the SMTP adapter. The provider choice is therefore not a lock-in.</li>
+<li><strong>Initial provider (revised 2026-11-25): no fixed monthly fee.</strong> Cloudflare Email Sending was considered first. Reaching arbitrary recipients requires the Workers Paid plan, a base fee of $5 a month plus usage, which is not wanted before there is real traffic. Providers without a base fee are used instead:<ul>
+<li><strong>Brevo, free plan, first</strong> (300 emails a day, marketing and transactional combined; SMTP relay, API and webhooks included). It serves both service emails and the free voting lane at the start.</li>
+<li><strong>Resend, free plan, as the standby</strong> (3,000 a month, 100 a day), configured so that service emails can fail over to it. The voting lane fails over only by decision, so that an abuse event does not spread to a second account.</li>
+<li><strong>When volume exceeds the free plans:</strong> a paid plan funded by revenue, or Amazon SES pay-as-you-go (about $0.10 to $0.16 per 1,000 emails, no monthly fee; leaving the sandbox requires a request to AWS).</li>
+<li><strong>Budget guard in the application.</strong> The Brevo daily limit is shared by every message. The application reserves part of it for service emails (for example 50 of 300), so that a large poll cannot block sign-in emails.</li>
+<li><strong>Known Brevo constraints to verify with a test send:</strong> the free plan adds a &quot;Sent with Brevo&quot; sticker (whether it appears on SMTP and API transactional messages is unconfirmed; removal needs a paid plan); new accounts may be reviewed before sending; the sending domain must be authenticated (a verification code record, DKIM, DMARC) or Brevo replaces it with its own; inbox placement is tested with Gmail and Outlook.</li>
+<li>Cloudflare Email Sending is revisited if the application runs on Workers and the base fee is justified by other use. Its free plan remains usable to test a sending domain against verified addresses.
+Prices and limits are checked against each provider&#39;s page before each decision.</li>
+</ul>
+</li>
+<li><strong>Account risk.</strong> The Cloudflare account holds domain registration and DNS. Sending is kept in separate provider accounts, so an abuse event in the free voting lane cannot put the domain or DNS at risk.</li>
+<li><strong>Verified 2026-11-26.</strong> A test message from <code>noreply@qohesion.app</code> through Brevo&#39;s API reached a Gmail inbox. DKIM passed with <code>qohesion.app</code> as signing domain, DMARC passed, SPF passed for the provider&#39;s bounce domain (not aligned, which DMARC allows), and no provider footer appeared. The provider also injected an open-tracking image and would wrap links in redirects. Open and click tracking must therefore be switched off at the provider, and every provider change is checked by sending a message with a link and reading it with <code>scripts/inspect-eml.py</code>, which fails on a tracking image or a wrapped link.</li>
+<li><strong>Lanes.</strong> Service emails (login, administrator notices) go from <code>noreply@qohesion.app</code>: Brevo authenticates the main domain (ownership code record, two DKIM CNAME records, DMARC with aggregate reports sent to Brevo). The name <code>mail.qohesion.app</code> (with <code>r.mail</code> and <code>img.mail</code>) belongs to Brevo&#39;s branded-link feature and is not used for our own sending. Tracking of opens and clicks stays off. The free voting lane uses a separate domain on a reputable TLD, in its own provider account. Paid organizations send from their own verified domain.</li>
+<li><strong>Alpha decision (2026-11-26).</strong> Until the free voting lane opens to the public, it uses the main domain <code>qohesion.app</code> with its own sender address, and no separate domain is bought. Nothing is sent to the public during alpha, so no reputation is shared yet. A separate domain on a reputable TLD is registered before the lane opens, and this line is then replaced.</li>
+<li><strong>TLD choice.</strong> A country-code or low-cost TLD with a high abuse rate can reduce inbox placement. <code>.cc</code> appears in the higher-risk group of recent spam-reputation reports. A reputable TLD (such as <code>.ca</code> or <code>.org</code>) is preferred. Deliverability is tested with Gmail and Outlook before use.</li>
+<li><strong>Capacity.</strong> Until the real daily quota is known, the free lane accepts small polls (target: up to 50 participants). When 70% of a provider limit is reached, capacity is raised (quota increase request, or paid plan) so that new registrations are served immediately.</li>
+</ul>
+<h3 id="10-content-style">10. Content style</h3>
+<p>All text follows <a href="../content-style.html">docs/content-style.md</a>, which defines two registers: a functional register (interface, emails, terms, documentation) that is objective, neutral, descriptive and procedural with no assumed context, and a brand register (tagline, headlines, social profiles) that is engaging and human but truthful. One language is displayed at a time, with a language switcher.</p>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>The question engine is built first, because settings and ballots depend on it.</li>
+<li>The Light mode forces the encrypted-ballot design early and is the smallest complete product.</li>
+<li>Several rules (fingerprints across organizations, attestation, complaint handling, first-contact emails under Canada&#39;s anti-spam law) need review by a lawyer before launch.</li>
+<li>Free capacity is bounded by the provider&#39;s free tier until paid plans fund more.</li>
+</ul>
+<h2 id="open-questions">Open questions</h2>
+<p>Exact quotas and the participants-versus-polls balance values. Thresholds for the bounce budget and the overlap flag. Whether Light mode needs more than one administrator at the informal level (currently allowed, with a visible warning). The name of the separate voting-lane domain, to be chosen before that lane opens (alpha uses <code>qohesion.app</code>).</p>
+
+</main>
+<footer class="foot">
+<span>Built from ea13917, 2026-11-26 18:35 UTC</span>
+<a href="https://github.com/msolav/qohesion/blob/main/docs/adr/0003-three-modes-one-engine.md">Source of this page</a>
+<a href="https://github.com/msolav/qohesion">Source code</a>
+</footer>
+</body>
+</html>
